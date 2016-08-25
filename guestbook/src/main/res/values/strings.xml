@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">GuestBook</string>
+
+    <string-array name="themes_array">
+        <item>Sand</item>
+        <item>Orange</item>
+        <item>Candy</item>
+        <item>Blossom</item>
+        <item>Grape</item>
+        <item>Deep</item>
+        <item>Sky</item>
+        <item>Grass</item>
+        <item>Dark</item>
+        <item>Snow</item>
+        <item>Sea</item>
+        <item>Blood</item>
+    </string-array>
 </resources>
