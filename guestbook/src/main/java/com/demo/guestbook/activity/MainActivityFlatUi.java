@@ -1,22 +1,17 @@
-package com.demo.guestbook;
+package com.demo.guestbook.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.cengalabs.flatui.FlatUI;
 import com.cengalabs.flatui.views.FlatButton;
-import com.cengalabs.flatui.views.FlatCheckBox;
 import com.cengalabs.flatui.views.FlatEditText;
-import com.cengalabs.flatui.views.FlatRadioButton;
-import com.cengalabs.flatui.views.FlatSeekBar;
-import com.cengalabs.flatui.views.FlatTextView;
-import com.cengalabs.flatui.views.FlatToggleButton;
+import com.demo.guestbook.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityFlatUi extends AppCompatActivity {
 
     private final int APP_THEME = R.array.blood;
 
@@ -33,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         // Default theme should be set before content view is added
         FlatUI.setDefaultTheme(APP_THEME);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_flatui);
 
         // Getting action bar background and applying it
         getSupportActionBar().setBackgroundDrawable(FlatUI.getActionBarDrawable(this, APP_THEME, false, 2));
