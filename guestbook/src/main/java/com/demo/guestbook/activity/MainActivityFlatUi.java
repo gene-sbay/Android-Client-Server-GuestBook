@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class MainActivityFlatUi extends AppCompatActivity {
 
-    private final int APP_THEME = R.array.blood;
+    private final int APP_THEME = R.array.grape;
 
     private ArrayList<FlatEditText> flatEditTexts = new ArrayList<FlatEditText>();
     private ArrayList<FlatButton> flatButtons = new ArrayList<FlatButton>();
