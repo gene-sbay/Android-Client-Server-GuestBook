@@ -1,0 +1,9 @@
+
+This document aims to identify points of interest in the current
+implementation, including why certain design/implementation choices
+were made
+
+=================
+FIREBASE
+
+1. At the moment opting to NOT require that there is auth to write to the db

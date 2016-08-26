@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GuestBook</string>
+    <string name="app_name">Guest Bookly</string>
 
     <string-array name="themes_array">
         <item>Sand</item>

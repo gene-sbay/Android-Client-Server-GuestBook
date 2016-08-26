@@ -11,6 +11,8 @@ import com.demo.guestbook.R;
 /**
  * Class used to update SimpleInfo's name object from the layout .i.e it update "name" variable
  * based on the text a user enters in either of the text field.
+ *
+ * This class must be present in order for the corresponding Xml to compile succesfully
  */
 public class DataBindingUtility {
 

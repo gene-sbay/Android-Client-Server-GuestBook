@@ -7,10 +7,10 @@
         <!-- "name" should be your class name(case Insensitive). -->
         <!-- "type" contains the path to the POJO class -->
 
-        <!-- Declaring guestEntry class which is used for binding variables to EditTexts -->
+        <!-- Declaring guestEntryViewModel class which is used for binding variables to EditTexts -->
         <variable
-            name="guestEntry"
-            type="com.demo.guestbook.pojo.GuestEntry" />
+            name="guestEntryViewModel"
+            type="com.demo.guestbook.model.view.GuestEntryViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,26 +24,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            app:binding="@{guestEntry.firstName}"/>
+            app:binding="@{guestEntryViewModel.firstName}"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            app:binding="@{guestEntry.lastName}"/>
+            app:binding="@{guestEntryViewModel.lastName}"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            app:binding="@{guestEntry.birthday}"/>
+            app:binding="@{guestEntryViewModel.birthday}"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:inputType="number"
-            app:binding="@{guestEntry.zipcode}"/>
+            app:binding="@{guestEntryViewModel.zipcode}"/>
         <!--
         -->
         <Button
