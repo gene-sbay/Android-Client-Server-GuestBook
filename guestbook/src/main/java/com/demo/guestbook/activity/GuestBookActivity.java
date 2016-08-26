@@ -1,10 +1,15 @@
 package com.demo.guestbook.activity;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cengalabs.flatui.FlatUI;
@@ -40,7 +45,7 @@ public class GuestBookActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
         initFlatUi();
-        initSubmit();
+        initSubmitHandlers();
     }
 
     private void initFlatUi() {
@@ -51,20 +56,34 @@ public class GuestBookActivity extends AppCompatActivity {
         FlatUI.setDefaultTheme(Const.APP_THEME);
     }
 
-    private void initSubmit() {
+    private void initSubmitHandlers() {
 
-        Button submitBtn = (Button) findViewById(R.id.submit_btn);
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        Button submitButton = (Button) findViewById(R.id.submit_btn);
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateFirebase();
             }
         });
+
+        mActivityMainBinding.edittextZipcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    updateFirebase();
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     private void updateFirebase() {
-        String message = "Saving: " + mGuestEntryViewModel.toString();
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
         GuestEntryMapper guestEntryMapper = new GuestEntryMapper();
         GuestEntry guestEntry = guestEntryMapper.map(mGuestEntryViewModel);
@@ -72,5 +91,9 @@ public class GuestBookActivity extends AppCompatActivity {
         FirebaseEndPoint firebaseEndPoint = new FirebaseEndPoint();
         firebaseEndPoint.connect();
         firebaseEndPoint.save(guestEntry);
+
+        String message = getString(R.string.success_message, guestEntry.getFirstName());
+
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
