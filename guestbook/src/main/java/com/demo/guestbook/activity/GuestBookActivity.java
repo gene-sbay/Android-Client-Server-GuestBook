@@ -21,7 +21,7 @@ import com.firebase.client.Firebase;
  * be reflected in another EditText.
  */
 
-public class MainActivityDatabinding extends AppCompatActivity {
+public class GuestBookActivity extends AppCompatActivity {
 
     private GuestEntryViewModel mGuestEntryViewModel;
 
