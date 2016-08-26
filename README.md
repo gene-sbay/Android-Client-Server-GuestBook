@@ -16,7 +16,7 @@ It is the latter in the case of this project.
 Project Scope Requirements
 --------------------------
 - Get  input for basic user info
-- Persist to remote service, eg Firebase
+- Persist to remote service on par with Firebase
 
 
 Refinements
