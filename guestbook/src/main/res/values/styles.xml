@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="WrapperLayout" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">5dip</item>
+    </style>
+
+    <style name="FlatEditText1" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_margin">5dip</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:inputType">textCapWords|textNoSuggestions</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:includeFontPadding">true</item>
+    </style>
+
 </resources>

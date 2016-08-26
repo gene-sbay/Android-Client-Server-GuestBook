@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
 
+    <color name="colorPrimary">@color/grape_primary</color>
+    <color name="colorPrimaryDark">@color/grape_darker</color>
+    <color name="colorAccent">@color/grape_dark</color>
+
+    <!-- Here for FlatUI demo activity  -->
     <color name="theme1_darker_color">#ff0a463a</color>
     <color name="theme1_dark_color">#ff1a8868</color>
     <color name="theme1_primary_color">#1abc9c</color>
