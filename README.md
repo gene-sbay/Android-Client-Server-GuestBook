@@ -13,15 +13,14 @@ https://guides.github.com/activities/forking/
 It is the latter in the case of this project.  
 
 
-Project Scope
--------------
-
-Requirements:
-- Get user input for basic info
+Project Scope Requirements
+--------------------------
+- Get  input for basic user info
 - Persist to remote service, eg Firebase
 
 
-Enhancements beyond requirements:
+Refinements
+---------------------------------------
 - Leveraging the FlatUI project for a clean default UI/UX template to start with
 - Support for data binding on the input form
 
