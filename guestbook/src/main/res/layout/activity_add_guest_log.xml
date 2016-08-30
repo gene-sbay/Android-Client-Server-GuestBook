@@ -19,7 +19,7 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
-                  tools:context=".activity.MainActivityFlatUi">
+                  tools:context=".activity.base.DemoActivityFlatUi">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -51,6 +51,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:gravity="center_vertical"
+                    android:id="@+id/birthday_layout"
+                    android:padding="10dp"
                     android:layout_marginLeft="10dp"
                     android:orientation="horizontal" >
 
@@ -67,7 +69,7 @@
 -->
 
                     <com.cengalabs.flatui.views.FlatEditText
-                        android:id="@+id/birthday"
+                        android:id="@+id/edittext_birthday"
                         android:layout_width="wrap_content"
                         android:textStyle="bold"
                         android:padding="10dp"
@@ -75,10 +77,10 @@
                         style="@style/FlatEditText1"
                         flatui:fl_fieldStyle="fl_box"
                         flatui:fl_theme="@array/orange"
-                        android:clickable="false"
+                        android:clickable="true"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:focusableInTouchMode="false" />
+                        android:focusableInTouchMode="true" />
                 </LinearLayout>
 
 

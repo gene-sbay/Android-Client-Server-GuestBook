@@ -54,6 +54,7 @@ public class FirebaseEndPoint {
             public void onDataChange(DataSnapshot snapshot) {
                 long childrenCount = snapshot.getChildrenCount();
                 Iterable<DataSnapshot> dataSnapshots = snapshot.getChildren();
+                //for ()
                 Object dataSnapshot = snapshot.getValue();
                 System.out.println(dataSnapshot);
             }

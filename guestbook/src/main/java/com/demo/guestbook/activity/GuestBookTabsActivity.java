@@ -16,10 +16,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.cengalabs.flatui.FlatUI;
 import com.demo.guestbook.R;
+import com.demo.guestbook.model.pojo.GuestEntry;
+import com.demo.guestbook.model.sharedprefs.AppStateDao;
+import com.demo.guestbook.util.Const;
+import com.demo.guestbook.util.TheApp;
+
+import java.util.List;
 
 public class GuestBookTabsActivity extends AppCompatActivity {
+
+    public final static int SECTION_LOCAL_ENTRIES = 1;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -39,10 +49,14 @@ public class GuestBookTabsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Default theme should be set before content view is added
+        FlatUI.setDefaultTheme(Const.APP_THEME);
+
         setContentView(R.layout.tab_activity_guest_book);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -72,6 +86,10 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
     /**
      * A placeholder fragment containing a simple view.
@@ -101,9 +119,18 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
+            int section = getArguments().getInt(ARG_SECTION_NUMBER);
             View rootView = inflater.inflate(R.layout.tab_fragment_guest_book, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            textView.setText(getString(R.string.section_format, section));
+
+            if (section == SECTION_LOCAL_ENTRIES) {
+
+                List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
+                Toast.makeText(TheApp.getAppContext(), "We'll show local stuff here", Toast.LENGTH_SHORT).show();
+            }
+
             return rootView;
         }
     }

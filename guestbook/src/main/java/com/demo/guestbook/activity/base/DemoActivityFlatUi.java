@@ -1,4 +1,4 @@
-package com.demo.guestbook.activity;
+package com.demo.guestbook.activity.base;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +11,7 @@ import com.demo.guestbook.R;
 
 import java.util.ArrayList;
 
-public class MainActivityFlatUi extends AppCompatActivity {
+public class DemoActivityFlatUi extends AppCompatActivity {
 
     private final int APP_THEME = R.array.grape;
 
@@ -28,7 +28,7 @@ public class MainActivityFlatUi extends AppCompatActivity {
         // Default theme should be set before content view is added
         FlatUI.setDefaultTheme(APP_THEME);
 
-        setContentView(R.layout.activity_main_flatui);
+        setContentView(R.layout.zero_activity_flatui);
 
         // Getting action bar background and applying it
         getSupportActionBar().setBackgroundDrawable(FlatUI.getActionBarDrawable(this, APP_THEME, false, 2));

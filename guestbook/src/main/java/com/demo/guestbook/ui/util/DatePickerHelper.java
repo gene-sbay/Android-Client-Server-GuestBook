@@ -2,9 +2,11 @@ package com.demo.guestbook.ui.util;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.demo.guestbook.R;
@@ -17,16 +19,16 @@ public class DatePickerHelper {
 
     private Activity mActivity;
 
-    private TextView mTextViewDisplayDate;
+    private EditText mEditTextDateDisplay;
     private Button mButtonChangeDate;
 
     private int mYear;
     private int mMonth;
     private int mDay;
 
-    public DatePickerHelper(Activity activity, int dateDisplayTextViewId) {
+    public DatePickerHelper(Activity activity, int dateDisplayEditTextId) {
         mActivity = activity;
-        mTextViewDisplayDate = (TextView) mActivity.findViewById(R.id.birthday);
+        mEditTextDateDisplay = (EditText) mActivity.findViewById(dateDisplayEditTextId);
     }
 
     public DatePickerDialog getDatePickerDialog() {
@@ -44,6 +46,14 @@ public class DatePickerHelper {
 
     public void addListenerOnButton() {
 
+        mEditTextDateDisplay.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mActivity.showDialog(DATE_DIALOG_ID);
+                return false;
+            }
+        });
+
         mButtonChangeDate = (Button) mActivity.findViewById(R.id.btnChangeDate);
 
         mButtonChangeDate.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +64,7 @@ public class DatePickerHelper {
                 mActivity.showDialog(DATE_DIALOG_ID);
             }
         });
+
 
     }
 
@@ -67,14 +78,14 @@ public class DatePickerHelper {
             mMonth = selectedMonth;
             mDay = selectedDay;
 
-            mTextViewDisplayDate.setText(
+            mEditTextDateDisplay.setText(
                     new StringBuilder().append(mMonth + 1)
                                             .append("-").append(mDay)
                                             .append("-").append(mYear));
         }
     };
 
-    public TextView getTextViewDisplayDate() {
-        return mTextViewDisplayDate;
+    public TextView getEditTextDateDisplay() {
+        return mEditTextDateDisplay;
     }
 }

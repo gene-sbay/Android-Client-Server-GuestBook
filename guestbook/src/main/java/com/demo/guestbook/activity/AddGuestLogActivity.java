@@ -68,7 +68,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
 
         setupActionBar();
 
-        mDatePickerHelper = new DatePickerHelper(this, R.id.birthday);
+        mDatePickerHelper = new DatePickerHelper(this, R.id.edittext_birthday);
         mDatePickerHelper.setCurrentDateOnView();
         mDatePickerHelper.addListenerOnButton();
     }
@@ -88,10 +88,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
+                    hideKeyboard(v);
                     updateFirebase();
                     return true;
                 }
