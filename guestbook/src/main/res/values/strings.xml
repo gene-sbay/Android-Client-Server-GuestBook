@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Guest Bookly</string>
+    <string name="guest_entries_title">Guest Bookly User Entries</string>
+    <string name="edit">Edit It</string>
 
     <string name="add_guest_entry">Add Guest Entry</string>
     <string name="add_guest_entry_error">Data could not be saved.\n\nFirebase Error Message: %s</string>

@@ -17,4 +17,13 @@ public class GuestEntryMapper {
         guestEntry.setZipcode(guestEntryViewModel.zipcode.get());
         return guestEntry;
     }
+
+    public GuestEntryViewModel map(GuestEntry guestEntry) {
+        GuestEntryViewModel guestEntryViewModel = new GuestEntryViewModel();
+        guestEntryViewModel.firstName.set(guestEntry.getFirstName());
+        guestEntryViewModel.lastName.set(guestEntry.getLastName());
+        guestEntryViewModel.birthday.set(guestEntry.getBirthday());
+        guestEntryViewModel.zipcode.set(guestEntry.getZipcode());
+        return guestEntryViewModel;
+    }
 }
