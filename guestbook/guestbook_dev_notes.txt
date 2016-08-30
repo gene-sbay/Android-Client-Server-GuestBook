@@ -7,3 +7,19 @@ were made
 FIREBASE
 
 1. At the moment opting to NOT require that there is auth to write to the db
+
+
+
+=======================
+IMPLEMENTATION DETAILS of INTEREST
+
+- Date picker UI/UX
+- Data binding for single form
+- Up navigation
+- Proper use of Async task to show/hide progressDialog
+- FlatUI project
+- Firebase DB Android API interface
+- SharedPrefs facilities
+- Model, ViewModel, & Mapper Patterns
+
+

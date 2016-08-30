@@ -93,7 +93,7 @@
                     android:maxLength="11"
                     flatui:fl_fieldStyle="fl_box"
                     flatui:fl_theme="@array/grape"
-                    android:inputType="text"
+                    android:inputType="number|phone"
                     android:digits="0,1,2,3,4,5,6,7,8,9,-"
                     app:binding="@{guestEntryViewModel.zipcode}"/>
 
