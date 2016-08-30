@@ -5,10 +5,10 @@ package com.demo.guestbook.model.pojo;
  */
 public class GuestEntry {
 
-    private String firstName = new String();
-    private String lastName = new String();
-    private String birthday = new String();
-    private String zipcode = new String();
+    private String firstName;
+    private String lastName;
+    private String birthday;
+    private String zipcode;
 
     public String getFirstName() {
         return firstName;

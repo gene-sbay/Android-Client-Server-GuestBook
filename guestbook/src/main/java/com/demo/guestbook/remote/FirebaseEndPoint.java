@@ -47,6 +47,23 @@ public class FirebaseEndPoint {
         });
     }
 
+    public void testGetAll() {
+        Firebase guestLogRef = new com.firebase.client.Firebase("https://guest-bookly.firebaseio.com/guest_log");
+        guestLogRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                long childrenCount = snapshot.getChildrenCount();
+                Iterable<DataSnapshot> dataSnapshots = snapshot.getChildren();
+                Object dataSnapshot = snapshot.getValue();
+                System.out.println(dataSnapshot);
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+    }
+
     private String getNextDatabaseId() {
 
         long timeL = Calendar.getInstance().getTimeInMillis();

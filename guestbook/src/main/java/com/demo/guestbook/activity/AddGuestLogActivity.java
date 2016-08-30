@@ -1,6 +1,5 @@
 package com.demo.guestbook.activity;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +22,13 @@ import com.demo.guestbook.model.sharedprefs.AppState;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
 import com.demo.guestbook.model.view.GuestEntryViewModel;
 import com.demo.guestbook.remote.FirebaseEndPoint;
+import com.demo.guestbook.ui.util.DatePickerHelper;
 import com.demo.guestbook.ui.util.DialogUtil;
 import com.demo.guestbook.util.Const;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
-import java.util.Calendar;
 
 /**
  * Launcher Activity displaying two EditTexts. Both EditTexts point to same class object. Since we
@@ -45,6 +42,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
     private GuestEntryViewModel mGuestEntryViewModel;
     private ActivityAddGuestLogBinding mActivityMainBinding;
     private GuestEntry mGuestEntry;
+    private DatePickerHelper mDatePickerHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +56,6 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         mGuestEntryViewModel = new GuestEntryViewModel();
         mActivityMainBinding.setGuestEntryViewModel(mGuestEntryViewModel);
 
-        int numChars = 15;
-        String placeHolder = "";
-        for (int i = 0; i < numChars; i++) {
-            placeHolder += " ";
-        }
-        mActivityMainBinding.edittextZipcode.setText(placeHolder);
         Firebase.setAndroidContext(this);
 
         initFlatUi();
@@ -71,33 +63,16 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
 
         setupActionBar();
 
-        tvDisplayDate = (TextView) findViewById(R.id.tvDate);
-        //dpResult = (DatePicker) findViewById(R.id.dpResult);
+        mDatePickerHelper = new DatePickerHelper(this, R.id.textviewDate);
+        mDatePickerHelper.setCurrentDateOnView();
+        mDatePickerHelper.addListenerOnButton();
 
-
-        setCurrentDateOnView();
-        addListenerOnButton();
-
-        Firebase guestLogRef = new com.firebase.client.Firebase("https://guest-bookly.firebaseio.com/guest_log");
-        guestLogRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                long childrenCount = snapshot.getChildrenCount();
-                Iterable<DataSnapshot> dataSnapshots = snapshot.getChildren();
-                Object dataSnapshot = snapshot.getValue();
-                System.out.println(dataSnapshot);
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
+        new FirebaseEndPoint().testGetAll();
     }
 
     private void initFlatUi() {
         // converts the default values to dp to be compatible with different screen sizes
         FlatUI.initDefaultValues(this);
-
     }
 
     private void initSubmitHandlers() {
@@ -127,6 +102,11 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         });
     }
 
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     private void updateFirebase() {
 
         GuestEntryMapper guestEntryMapper = new GuestEntryMapper();
@@ -154,83 +134,14 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         new DialogUtil().getErrorAlertDialog(AddGuestLogActivity.this, message);
     }
 
-    // // //
-
-
-    private TextView tvDisplayDate;
-    //private DatePicker dpResult;
-    private Button btnChangeDate;
-
-    private int year;
-    private int month;
-    private int day;
-
-    static final int DATE_DIALOG_ID = 999;
-
-    // display current date
-    public void setCurrentDateOnView() {
-
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-
-        // set current date into textview
-        //tvDisplayDate.setText(new StringBuilder()
-        //        // Month is 0 based, just add 1
-        //        .append(month + 1).append("-").append(day).append("-")
-        //        .append(year).append(" "));
-
-        // set current date into datepicker
-        //dpResult.init(year, month, day, null);
-
-    }
-
-    public void addListenerOnButton() {
-
-        btnChangeDate = (Button) findViewById(R.id.btnChangeDate);
-
-        btnChangeDate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                showDialog(DATE_DIALOG_ID);
-
-            }
-
-        });
-
-    }
-
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-            case DATE_DIALOG_ID:
+            case DatePickerHelper.DATE_DIALOG_ID:
                 // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener, year, month,
-                        day);
+                //return new DatePickerDialog(this, datePickerListener, year, month, day);
+                return mDatePickerHelper.getDatePickerDialog();
         }
         return null;
     }
-
-    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-
-            // set selected date into textview
-            tvDisplayDate.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "));
-
-            // set selected date into datepicker also
-            //dpResult.init(year, month, day, null);
-
-        }
-    };
 }
