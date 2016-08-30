@@ -123,17 +123,13 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            int layoutId = R.layout.tab_fragment_guest_book;
             int section = getArguments().getInt(ARG_SECTION_NUMBER);
             if (section == SECTION_LOCAL_ENTRIES) {
 
-                layoutId = R.layout.fragment_recycler_list;
+                View rootView = inflater.inflate(R.layout.fragment_recycler_list, container, false);
+
                 Toast.makeText(TheApp.getAppContext(), "We'll show local stuff here", Toast.LENGTH_SHORT).show();
-            }
 
-            View rootView = inflater.inflate(layoutId, container, false);
-
-            if (section == SECTION_LOCAL_ENTRIES) {
                 RecyclerView mRecyclerView;
                 GuestListRecyclerViewAdapter mAdapter;
 
@@ -146,11 +142,14 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
                 mAdapter = new GuestListRecyclerViewAdapter(getActivity(), guestEntries);
                 mRecyclerView.setAdapter(mAdapter);
+
+                return rootView;
             }
-            else {
-                TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-                textView.setText(getString(R.string.section_format, section));
-            }
+
+            View rootView = inflater.inflate(R.layout.tab_fragment_guest_book, container, false);
+
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setText(getString(R.string.section_format, section));
 
             return rootView;
         }
