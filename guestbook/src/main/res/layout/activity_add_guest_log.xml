@@ -61,16 +61,25 @@
                         flatui:fl_fieldStyle="fl_box"
                         flatui:fl_theme="@array/orange"
                         />
+<!--
+-->
 
-                    <TextView
-                        android:id="@+id/textviewDate"
+                    <com.cengalabs.flatui.views.FlatEditText
+                        android:id="@+id/birthday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="10dp"
-                        android:text="@string/please_set"
+                        app:binding="@{guestEntryViewModel.birthday}"
+                        style="@style/FlatEditText1"
+                        flatui:fl_fieldStyle="fl_box"
+                        flatui:fl_theme="@array/orange"
+                        android:inputType="text"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
-
                 </LinearLayout>
 
 

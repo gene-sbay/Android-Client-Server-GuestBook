@@ -1,6 +1,8 @@
 package com.demo.guestbook.model.view;
 
+import com.demo.guestbook.R;
 import com.demo.guestbook.ui.binding.BindableString;
+import com.demo.guestbook.util.TheApp;
 
 /**
  * A Simple POJO class containing a BaseObservable String.
@@ -12,6 +14,10 @@ public class GuestEntryViewModel {
     public BindableString lastName = new BindableString();
     public BindableString birthday = new BindableString();
     public BindableString zipcode = new BindableString();
+
+    public GuestEntryViewModel() {
+        birthday.set(TheApp.findString(R.string.please_set));
+    }
 
     @Override
     public String toString() {

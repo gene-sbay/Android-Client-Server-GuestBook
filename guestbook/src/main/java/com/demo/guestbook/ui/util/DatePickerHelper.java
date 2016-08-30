@@ -26,7 +26,7 @@ public class DatePickerHelper {
 
     public DatePickerHelper(Activity activity, int dateDisplayTextViewId) {
         mActivity = activity;
-        mTextViewDisplayDate = (TextView) mActivity.findViewById(R.id.textviewDate);
+        mTextViewDisplayDate = (TextView) mActivity.findViewById(R.id.birthday);
     }
 
     public DatePickerDialog getDatePickerDialog() {

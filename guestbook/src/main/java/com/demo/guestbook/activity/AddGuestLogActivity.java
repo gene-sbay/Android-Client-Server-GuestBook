@@ -25,10 +25,8 @@ import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.ui.util.DatePickerHelper;
 import com.demo.guestbook.ui.util.DialogUtil;
 import com.demo.guestbook.util.Const;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 /**
  * Launcher Activity displaying two EditTexts. Both EditTexts point to same class object. Since we
@@ -40,7 +38,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
     implements FirebaseEndPoint.Listener {
 
     private GuestEntryViewModel mGuestEntryViewModel;
-    private ActivityAddGuestLogBinding mActivityMainBinding;
+    private ActivityAddGuestLogBinding mActivityAddGuestLogBinding;
     private GuestEntry mGuestEntry;
     private DatePickerHelper mDatePickerHelper;
 
@@ -52,27 +50,27 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         FlatUI.setDefaultTheme(Const.APP_THEME);
 
         // No need to add a setContentView(), we will use DataBinding to set the contentView
-        mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_guest_log);
+        mActivityAddGuestLogBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_guest_log);
         mGuestEntryViewModel = new GuestEntryViewModel();
-        mActivityMainBinding.setGuestEntryViewModel(mGuestEntryViewModel);
+        mActivityAddGuestLogBinding.setGuestEntryViewModel(mGuestEntryViewModel);
 
         Firebase.setAndroidContext(this);
 
-        initFlatUi();
+        initLayout();
         initSubmitHandlers();
-
-        setupActionBar();
-
-        mDatePickerHelper = new DatePickerHelper(this, R.id.textviewDate);
-        mDatePickerHelper.setCurrentDateOnView();
-        mDatePickerHelper.addListenerOnButton();
 
         new FirebaseEndPoint().testGetAll();
     }
 
-    private void initFlatUi() {
+    private void initLayout() {
         // converts the default values to dp to be compatible with different screen sizes
         FlatUI.initDefaultValues(this);
+
+        setupActionBar();
+
+        mDatePickerHelper = new DatePickerHelper(this, R.id.birthday);
+        mDatePickerHelper.setCurrentDateOnView();
+        mDatePickerHelper.addListenerOnButton();
     }
 
     private void initSubmitHandlers() {
@@ -86,7 +84,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
             }
         });
 
-        mActivityMainBinding.edittextZipcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mActivityAddGuestLogBinding.edittextZipcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
