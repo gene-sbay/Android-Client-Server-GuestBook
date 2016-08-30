@@ -10,6 +10,7 @@
     <string name="zipcode">Zipcode</string>
     <string name="submit">Submit</string>
     <string name="success_message">We have updated your info in Guest Bookly.  Thanks for sharing %s !</string>
+    <string name="please_set">Please set</string>
 
     <string-array name="themes_array">
         <item>Sand</item>

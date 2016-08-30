@@ -45,22 +45,60 @@
                     flatui:fl_theme="@array/grape"
                     app:binding="@{guestEntryViewModel.lastName}"/>
 
-                <com.cengalabs.flatui.views.FlatEditText
-                    android:id="@+id/edittext_birthday"
-                    android:hint="@string/birthday"
-                    style="@style/FlatEditText1"
-                    flatui:fl_fieldStyle="fl_box"
-                    flatui:fl_theme="@array/grape"
-                    app:binding="@{guestEntryViewModel.birthday}"/>
 
+                <!-- maxLength="11" for: 5 digits, dash, 5 digits -->
                 <com.cengalabs.flatui.views.FlatEditText
                     android:id="@+id/edittext_zipcode"
                     android:hint="@string/zipcode"
                     style="@style/FlatEditText1"
+                    android:maxLength="11"
                     flatui:fl_fieldStyle="fl_box"
                     flatui:fl_theme="@array/grape"
                     android:inputType="number"
+                    android:digits="0,1,2,3,4,5,6,7,8,9,-"
                     app:binding="@{guestEntryViewModel.zipcode}"/>
+
+                <!--
+
+                                <DatePicker
+                                    android:id="@+id/birthday_datepicker"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <com.cengalabs.flatui.views.FlatEditText
+                                    android:id="@+id/edittext_birthday"
+                                    android:hint="@string/birthday"
+                                    style="@style/FlatEditText1"
+                                    flatui:fl_fieldStyle="fl_box"
+                                    flatui:fl_theme="@array/grape"
+                                    app:binding="@{guestEntryViewModel.birthday}"/>
+
+                -->
+                <LinearLayout
+                              android:layout_width="fill_parent"
+                              android:layout_height="fill_parent"
+                              android:orientation="horizontal" >
+
+                    <com.cengalabs.flatui.views.FlatButton
+                        android:id="@+id/btnChangeDate"
+                        android:text="@string/birthday"
+                        android:layout_height="45dp"
+                        android:layout_width="wrap_content"
+                        android:layout_margin="3dp"
+                        flatui:fl_fieldStyle="fl_box"
+                        flatui:fl_theme="@array/orange"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:text="@string/please_set"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                </LinearLayout>
 
                 <com.cengalabs.flatui.views.FlatButton
                     android:id="@+id/submit_btn"
