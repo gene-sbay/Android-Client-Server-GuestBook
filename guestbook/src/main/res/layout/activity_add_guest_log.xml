@@ -50,6 +50,8 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
                     android:orientation="horizontal" >
 
                     <com.cengalabs.flatui.views.FlatButton
@@ -67,19 +69,16 @@
                     <com.cengalabs.flatui.views.FlatEditText
                         android:id="@+id/birthday"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:textStyle="bold"
                         android:padding="10dp"
                         app:binding="@{guestEntryViewModel.birthday}"
                         style="@style/FlatEditText1"
                         flatui:fl_fieldStyle="fl_box"
                         flatui:fl_theme="@array/orange"
-                        android:inputType="text"
                         android:clickable="false"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        android:focusableInTouchMode="false" />
                 </LinearLayout>
 
 
