@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.cengalabs.flatui.FlatUI;
 import com.demo.guestbook.R;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
+import com.demo.guestbook.ui.list.GuestListRecyclerViewAdapter;
 import com.demo.guestbook.util.Const;
 import com.demo.guestbook.util.TheApp;
 
@@ -91,25 +93,26 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
+
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class GuestBookTabsFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
+        public GuestBookTabsFragment() {
         }
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static GuestBookTabsFragment newInstance(int sectionNumber) {
+            GuestBookTabsFragment fragment = new GuestBookTabsFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -120,15 +123,33 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
+            int layoutId = R.layout.tab_fragment_guest_book;
             int section = getArguments().getInt(ARG_SECTION_NUMBER);
-            View rootView = inflater.inflate(R.layout.tab_fragment_guest_book, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, section));
-
             if (section == SECTION_LOCAL_ENTRIES) {
 
-                List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
+                layoutId = R.layout.fragment_recycler_list;
                 Toast.makeText(TheApp.getAppContext(), "We'll show local stuff here", Toast.LENGTH_SHORT).show();
+            }
+
+            View rootView = inflater.inflate(layoutId, container, false);
+
+            if (section == SECTION_LOCAL_ENTRIES) {
+                RecyclerView mRecyclerView;
+                GuestListRecyclerViewAdapter mAdapter;
+
+                mRecyclerView = (RecyclerView) rootView.findViewById(R.id.listRecyclerView);
+                LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(llm);
+                mRecyclerView.setHasFixedSize(true);
+
+                List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
+
+                mAdapter = new GuestListRecyclerViewAdapter(getActivity(), guestEntries);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+            else {
+                TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+                textView.setText(getString(R.string.section_format, section));
             }
 
             return rootView;
@@ -148,8 +169,8 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            // Return a GuestBookTabsFragment (defined as a static inner class below).
+            return GuestBookTabsFragment.newInstance(position + 1);
         }
 
         @Override
