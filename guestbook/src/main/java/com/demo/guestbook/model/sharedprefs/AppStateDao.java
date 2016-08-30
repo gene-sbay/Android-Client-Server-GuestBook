@@ -32,6 +32,15 @@ public class AppStateDao extends SharedPrefsJsonDao {
         getAppStateDao().setSingleton(appState);
     }
 
+    private static AppStateDao getAppStateDao() {
+
+        if (sAppStateDao == null) {
+            sAppStateDao = new AppStateDao();
+        }
+
+        return sAppStateDao;
+    }
+
     private AppStateDao() {}
 
     @Override
@@ -56,15 +65,6 @@ public class AppStateDao extends SharedPrefsJsonDao {
     protected void setSingleton(AppState appState) {
 
         sAppState = appState;
-    }
-
-    private static AppStateDao getAppStateDao() {
-
-        if (sAppStateDao == null) {
-            sAppStateDao = new AppStateDao();
-        }
-
-        return sAppStateDao;
     }
 
     /**
