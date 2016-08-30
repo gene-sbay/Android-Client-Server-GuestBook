@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Guest Bookly</string>
 
+    <string name="add_guest_entry">Add Guest Entry</string>
+    <string name="add_guest_entry_error">Data could not be saved.\n\nFirebase Error Message: %s</string>
+
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="birthday">Birthday</string>
@@ -22,4 +25,7 @@
         <item>Sea</item>
         <item>Blood</item>
     </string-array>
+    <string name="title_activity_guest_book_tabs">GuestBookTabsActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

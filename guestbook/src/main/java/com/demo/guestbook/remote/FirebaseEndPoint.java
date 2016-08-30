@@ -2,12 +2,21 @@ package com.demo.guestbook.remote;
 
 
 import com.demo.guestbook.model.pojo.GuestEntry;
+import com.demo.guestbook.ui.util.DialogUtil;
 import com.demo.guestbook.util.Const;
 import com.demo.guestbook.util.DeviceUtil;
+import com.demo.guestbook.util.Logr;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import java.util.Calendar;
 
 public class FirebaseEndPoint {
+
+    public interface Listener {
+        void onFirebaseSuccess();
+        void onFirebaseError(FirebaseError firebaseError);
+    }
 
     com.firebase.client.Firebase mRootRef;
 
@@ -15,13 +24,25 @@ public class FirebaseEndPoint {
         mRootRef = new com.firebase.client.Firebase(Const.Firebase.PROJECT_URL);
     }
 
-    public void save(GuestEntry guestEntry) {
+    public void save(GuestEntry guestEntry, final Listener firebaseListener) {
 
         String nodeId = getNextDatabaseId();
 
         com.firebase.client.Firebase guestLogRef = mRootRef.child(Const.Firebase.GUEST_LOG).child(nodeId);
 
-        guestLogRef.setValue(guestEntry);
+        guestLogRef.setValue(guestEntry, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                if (firebaseError != null) {
+                    Logr.e("Failed to setValue via Firebase");
+                    firebaseListener.onFirebaseError(firebaseError);
+                }
+                else {
+                    Logr.d("Data saved successfully.");
+                    firebaseListener.onFirebaseSuccess();
+                }
+            }
+        });
     }
 
     private String getNextDatabaseId() {
