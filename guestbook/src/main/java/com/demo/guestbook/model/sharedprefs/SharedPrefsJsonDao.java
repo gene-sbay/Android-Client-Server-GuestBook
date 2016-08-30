@@ -1,6 +1,5 @@
-package com.demo.guestbook.prefs;
+package com.demo.guestbook.model.sharedprefs;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 
 import com.demo.guestbook.util.TheApp;

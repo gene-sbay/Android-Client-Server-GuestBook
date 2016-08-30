@@ -1,4 +1,4 @@
-package com.demo.guestbook.prefs;
+package com.demo.guestbook.model.sharedprefs;
 
 import com.demo.guestbook.util.Const;
 import com.google.gson.Gson;

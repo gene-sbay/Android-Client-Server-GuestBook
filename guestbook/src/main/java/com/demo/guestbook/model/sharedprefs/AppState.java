@@ -1,4 +1,4 @@
-package com.demo.guestbook.prefs;
+package com.demo.guestbook.model.sharedprefs;
 
 import com.demo.guestbook.model.pojo.GuestEntry;
 
