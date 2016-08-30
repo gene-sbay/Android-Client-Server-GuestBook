@@ -10,16 +10,23 @@ FIREBASE
 
 
 
-=======================
-IMPLEMENTATION DETAILS of INTEREST
+==========================
+UI Dev-DETAILS of INTEREST
 
 - Date picker UI/UX
 - Data binding for single form
 - Up navigation
-- Proper use of Async task to show/hide progressDialog
 - FlatUI project
+
+
+
+==========================
+"Under The Hood" Dev-DETAILS of INTEREST
+
+- Proper use of Async task to show/hide progressDialog
 - Firebase DB Android API interface
 - SharedPrefs facilities
 - Model, ViewModel, & Mapper Patterns
+- public class TheApp extends Application for "global" Context reference
 
 

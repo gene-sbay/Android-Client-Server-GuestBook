@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.demo.guestbook.R;
+import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.ui.util.DialogUtil;
 import com.demo.guestbook.util.TheApp;
+import com.firebase.client.Firebase;
 
 
 /**
@@ -24,6 +26,8 @@ public class StartPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_page);
+
+        Firebase.setAndroidContext(this);
 
         new StartupBackgroundTask().execute();
     }
@@ -58,6 +62,8 @@ public class StartPageActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
+
+            new FirebaseEndPoint().testGetAll();
 
             // Place holder sleep . Will replace with Firebase service look up
 

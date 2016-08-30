@@ -58,8 +58,6 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
 
         initLayout();
         initSubmitHandlers();
-
-        new FirebaseEndPoint().testGetAll();
     }
 
     private void initLayout() {
@@ -126,7 +124,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
     @Override
     public void onFirebaseError(FirebaseError firebaseError) {
 
-        String message =  getString(R.string.add_guest_entry_error, firebaseError.getMessage());
+        String message = getString(R.string.add_guest_entry_error, firebaseError.getMessage());
         new DialogUtil().getErrorAlertDialog(AddGuestLogActivity.this, message);
     }
 
