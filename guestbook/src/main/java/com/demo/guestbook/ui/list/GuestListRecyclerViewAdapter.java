@@ -6,9 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.demo.guestbook.R;
 import com.demo.guestbook.databinding.ListGuestCardBinding;
 import com.demo.guestbook.model.pojo.GuestEntry;
+import com.demo.guestbook.util.TheApp;
 
 import java.util.List;
 
@@ -45,6 +49,12 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
     public GuestEntryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         ListGuestCardBinding binding = ListGuestCardBinding.inflate(layoutInflater);
+        binding.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(TheApp.getAppContext(), "My Edit!", Toast.LENGTH_SHORT).show();
+            }
+        });
         return new GuestEntryViewHolder(binding.getRoot());
     }
 

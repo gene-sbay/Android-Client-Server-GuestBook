@@ -5,10 +5,19 @@ package com.demo.guestbook.model.pojo;
  */
 public class GuestEntry {
 
+    private String id;
     private String firstName;
     private String lastName;
     private String birthday;
     private String zipcode;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
