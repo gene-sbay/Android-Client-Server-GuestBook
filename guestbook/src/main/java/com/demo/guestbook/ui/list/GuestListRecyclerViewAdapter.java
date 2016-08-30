@@ -6,10 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.demo.guestbook.R;
 import com.demo.guestbook.databinding.ListGuestCardBinding;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.util.TheApp;
@@ -32,8 +30,8 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
         }
     }
 
-    List<GuestEntry> mGuestEntries;
-    Activity mActivity;
+    private List<GuestEntry> mGuestEntries;
+    private Activity mActivity;
 
     public GuestListRecyclerViewAdapter(Activity activity, List<GuestEntry> guestEntries){
         mActivity = activity;
@@ -48,11 +46,12 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
     @Override
     public GuestEntryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-        ListGuestCardBinding binding = ListGuestCardBinding.inflate(layoutInflater);
+        final ListGuestCardBinding binding = ListGuestCardBinding.inflate(layoutInflater);
         binding.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(TheApp.getAppContext(), "My Edit!", Toast.LENGTH_SHORT).show();
+                String id = binding.getGuestEntry().getId();
+                Toast.makeText(TheApp.getAppContext(), "My Edit with id: " + id, Toast.LENGTH_SHORT).show();
             }
         });
         return new GuestEntryViewHolder(binding.getRoot());

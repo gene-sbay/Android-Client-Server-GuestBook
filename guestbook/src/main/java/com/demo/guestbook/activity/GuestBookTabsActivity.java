@@ -1,21 +1,19 @@
 package com.demo.guestbook.activity;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +28,6 @@ import com.demo.guestbook.util.TheApp;
 import java.util.List;
 
 public class GuestBookTabsActivity extends AppCompatActivity {
-
-    public final static int SECTION_LOCAL_ENTRIES = 1;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -78,14 +74,27 @@ public class GuestBookTabsActivity extends AppCompatActivity {
                 GuestBookTabsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(GuestBookTabsActivity.this, AddGuestLogActivity.class);
-                        startActivity(intent);
+                        loadAddGuestLogActivity();
                     }
                 });
 
             }
         });
 
+    }
+
+    private void loadAddGuestLogActivity() {
+        loadAddGuestLogActivity(null);
+    }
+
+    private void loadAddGuestLogActivity(String guestEntryId) {
+        Intent intent = new Intent(GuestBookTabsActivity.this, AddGuestLogActivity.class);
+
+        if (guestEntryId != null) {
+            intent.putExtra(Const.Extra.GUEST_ENTRY_ID, guestEntryId);
+        }
+
+        startActivity(intent);
     }
 
     @Override
@@ -124,7 +133,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
 
             int section = getArguments().getInt(ARG_SECTION_NUMBER);
-            if (section == SECTION_LOCAL_ENTRIES) {
+            if (section == Const.Tabs.LOCAL_ENTRIES) {
 
                 View rootView = inflater.inflate(R.layout.fragment_recycler_list, container, false);
 
