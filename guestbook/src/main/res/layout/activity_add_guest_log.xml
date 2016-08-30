@@ -37,6 +37,7 @@
                     flatui:fl_theme="@array/grape"
                     app:binding="@{guestEntryViewModel.firstName}"/>
 
+
                 <com.cengalabs.flatui.views.FlatEditText
                     android:id="@+id/edittext_lastname"
                     android:hint="@string/last_name"
@@ -47,9 +48,9 @@
 
 
                 <LinearLayout
-                              android:layout_width="fill_parent"
-                              android:layout_height="fill_parent"
-                              android:orientation="horizontal" >
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal" >
 
                     <com.cengalabs.flatui.views.FlatButton
                         android:id="@+id/btnChangeDate"
@@ -73,6 +74,7 @@
                 </LinearLayout>
 
 
+
                 <!-- maxLength="11" for: 5 digits, dash, 5 digits -->
                 <com.cengalabs.flatui.views.FlatEditText
                     android:id="@+id/edittext_zipcode"
@@ -81,7 +83,7 @@
                     android:maxLength="11"
                     flatui:fl_fieldStyle="fl_box"
                     flatui:fl_theme="@array/grape"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:digits="0,1,2,3,4,5,6,7,8,9,-"
                     app:binding="@{guestEntryViewModel.zipcode}"/>
 

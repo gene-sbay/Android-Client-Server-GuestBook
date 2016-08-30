@@ -81,6 +81,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard(v);
                 updateFirebase();
             }
         });
