@@ -44,11 +44,14 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
     private ActivityAddGuestLogBinding mActivityAddGuestLogBinding;
     private GuestEntry mGuestEntry;
     private DatePickerHelper mDatePickerHelper;
-    private boolean mIsInEditMode = false;
+    private String mEditNodeId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        mEditNodeId = intent.getStringExtra(Const.Extra.GUEST_ENTRY_ID);
 
         // Default theme should be set before content view is added
         FlatUI.setDefaultTheme(Const.APP_THEME);
@@ -60,26 +63,22 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         initLayout();
         initSubmitHandlers();
     }
-
+    private boolean isInEditMode() {
+        return mEditNodeId != null;
+    };
+    
     private void setEditor() {
-
-        Intent intent = getIntent();
-        String guestEntryId = intent.getStringExtra(Const.Extra.GUEST_ENTRY_ID);
-        if (guestEntryId != null) {
-            mIsInEditMode = true;
-        }
-
 
         String submitText = TheApp.findString(R.string.submit);
         int deleteButtonVisibility = View.GONE;
 
-        if (mIsInEditMode ) {
+        if (isInEditMode() ) {
 
             submitText = TheApp.findString(R.string.update);
             deleteButtonVisibility = View.VISIBLE;
 
             GuestEntryMapper mapper = new GuestEntryMapper();
-            GuestEntry guestEntry = AppStateDao.getAppState().getLocalGuestEntryById(guestEntryId);
+            GuestEntry guestEntry = AppStateDao.getAppState().getLocalGuestEntryById(mEditNodeId);
             mGuestEntryViewModel = mapper.map(guestEntry);
         }
         else {
@@ -151,6 +150,11 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
             return;
         }
 
+        // using a known Id with the .save() method, will serve as an update in Firebase
+        if (isInEditMode()) {
+            mGuestEntry.setId(mEditNodeId);
+        }
+
         FirebaseEndPoint firebaseEndPoint = new FirebaseEndPoint();
         firebaseEndPoint.connect();
         firebaseEndPoint.save(mGuestEntry, this);
@@ -162,7 +166,16 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
         AppState appState = AppStateDao.getAppState();
-        appState.addLocalGuestEntry(mGuestEntry);
+
+        if (isInEditMode()) {
+
+            appState.updateLocalGuestEntry(mGuestEntry);
+        }
+        else {
+
+            appState.addLocalGuestEntry(mGuestEntry);
+        }
+
         AppStateDao.sharedPrefs_updateAppState(appState);
     }
 
