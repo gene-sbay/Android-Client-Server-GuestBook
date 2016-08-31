@@ -11,6 +11,7 @@ import java.util.List;
 public class AppState {
 
     private List<GuestEntry> mLocalGuestEntries;
+    private List<GuestEntry> mServerGuestEntries;
 
     public List<GuestEntry> getLocalGuestEntries() {
         verifyLocalGuestEntries();
@@ -25,6 +26,22 @@ public class AppState {
     private void verifyLocalGuestEntries() {
         if (mLocalGuestEntries == null) {
             mLocalGuestEntries = new ArrayList<>();
+        }
+    }
+
+    public List<GuestEntry> getServerGuestEntries() {
+        verifyServerGuestEntries();
+        return mServerGuestEntries;
+    }
+
+    public void setServerGuestEntries(List<GuestEntry> serverGuestEntries) {
+        verifyServerGuestEntries();
+        mServerGuestEntries = serverGuestEntries;
+    }
+
+    private void verifyServerGuestEntries() {
+        if (mServerGuestEntries == null) {
+            mServerGuestEntries = new ArrayList<>();
         }
     }
 }

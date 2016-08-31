@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.demo.guestbook.R;
+import com.demo.guestbook.model.mapper.GuestEntryMapper;
+import com.demo.guestbook.model.pojo.GuestEntry;
+import com.demo.guestbook.model.sharedprefs.AppStateDao;
 import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.util.TheApp;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+
+import java.util.List;
 
 
 /**
@@ -48,8 +53,11 @@ public class StartPageActivity extends AppCompatActivity
     @Override
     public void onDataChange(DataSnapshot guestLogSnapshot) {
 
-        mFirebaseEndPoint.doGuestLogIteration(guestLogSnapshot);
+        GuestEntryMapper mapper = new GuestEntryMapper();
 
+        List<GuestEntry> allServerGuestEntries = mapper.getAllGuestEntries(guestLogSnapshot);
+        AppStateDao.getAppState().setServerGuestEntries(allServerGuestEntries);
+        
         mProgressDialog.dismiss();
     }
 

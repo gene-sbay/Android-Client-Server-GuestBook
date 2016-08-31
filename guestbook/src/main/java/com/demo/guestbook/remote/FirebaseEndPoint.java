@@ -14,6 +14,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FirebaseEndPoint {
 
     public interface SetValueListener {
@@ -70,14 +73,6 @@ public class FirebaseEndPoint {
         });
     }
 
-
-    private ProgressDialog getVisibleProgressDialog(Activity activity) {
-        return ProgressDialog.show(activity,
-                TheApp.findString(R.string.app_name),
-                "Loading app data ...",
-                true, false);
-    }
-
     public void guestLogGetAll(final DataSnapshotListener dataSnapshotListener) {
 
         Firebase guestLogRef = new com.firebase.client.Firebase(Const.Firebase.GUEST_LOG_URL);
@@ -97,39 +92,6 @@ public class FirebaseEndPoint {
         });
     }
 
-    public void doGuestLogIteration(DataSnapshot guestLogSnapshot) {
-
-        GuestEntryMapper mapper = new GuestEntryMapper();
-
-        long childrenCount = guestLogSnapshot.getChildrenCount();
-        Iterable<DataSnapshot> dataSnapshots = guestLogSnapshot.getChildren();
-        for (DataSnapshot guestEntryDataSnapshot : dataSnapshots) {
-
-            String guestEntryKey = guestEntryDataSnapshot.getKey();
-
-            GuestEntry guestEntry = mapper.map(guestEntryDataSnapshot);
-
-            Iterable<DataSnapshot> dataSnapshotFields = guestEntryDataSnapshot.getChildren();
-
-            boolean idFieldFound = false;
-
-            for (DataSnapshot dataSnapshotField : dataSnapshotFields) {
-
-                String childKey = dataSnapshotField.getKey();
-
-                if (childKey.equals(Const.Field.ID)) {
-                    idFieldFound = true;
-                    break;
-                }
-
-                Object valObj = dataSnapshotField.getValue();
-                if (valObj != null) {
-                    String val = valObj.toString();
-                    Logr.d("val = " + val);
-                }
-            }
-        }
-    }
 
 
     public void removeNodesWithoutIdField(DataSnapshot guestLogSnapshot) {
@@ -156,21 +118,29 @@ public class FirebaseEndPoint {
         }
     }
 
-    public static String getStringValue(String key, DataSnapshot dataSnapshot) {
-
-        String value = "";
-
-        DataSnapshot valueObject = dataSnapshot.child(key);
-
-        try {
-            if (valueObject != null) {
-                value = valueObject.getValue().toString();
-            }
-        }
-        catch (NullPointerException npEx) {
-            npEx.printStackTrace();
-        }
-
-        return value;
-    }
 }
+
+
+/*
+long childrenCount = guestLogSnapshot.getChildrenCount();
+
+            Iterable<DataSnapshot> dataSnapshotFields = guestEntryDataSnapshot.getChildren();
+
+            boolean idFieldFound = false;
+
+            for (DataSnapshot dataSnapshotField : dataSnapshotFields) {
+
+                String childKey = dataSnapshotField.getKey();
+
+                if (childKey.equals(Const.Field.ID)) {
+                    idFieldFound = true;
+                    break;
+                }
+
+                Object valObj = dataSnapshotField.getValue();
+                if (valObj != null) {
+                    String val = valObj.toString();
+                    Logr.d("val = " + val);
+                }
+            }
+ */
