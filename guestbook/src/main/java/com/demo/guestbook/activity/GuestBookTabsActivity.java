@@ -24,6 +24,7 @@ import com.demo.guestbook.R;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
 import com.demo.guestbook.ui.list.GuestListRecyclerViewAdapter;
+import com.demo.guestbook.ui.list.RecyclerViewWrapper;
 import com.demo.guestbook.util.Const;
 import com.demo.guestbook.util.TheApp;
 
@@ -41,7 +42,10 @@ public class GuestBookTabsActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private RecyclerView mLocalListRecyclerView;
+    private RecyclerViewWrapper mLocalRecyclerViewWrapper;
+    // private RecyclerView mLocalListRecyclerView;
+    private RecyclerView mGlobalListRecyclerView;
+
     private GuestListRecyclerViewAdapter mAdapter;
 
 
@@ -68,6 +72,8 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        mLocalRecyclerViewWrapper = new RecyclerViewWrapper();
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -111,28 +117,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        resetRecyclerView();
-    }
-
-    public RecyclerView getLocalListRecyclerView() {
-        return mLocalListRecyclerView;
-    }
-
-    public void setLocalListRecyclerView(RecyclerView recyclerView) {
-        mLocalListRecyclerView = recyclerView;
-    }
-
-    private void resetRecyclerView() {
-
-        // hasn't been initialized yet
-        if (mLocalListRecyclerView == null) {
-            return;
-        }
-
-        List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
-        mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
-        mLocalListRecyclerView.setAdapter(mAdapter);
-        mLocalListRecyclerView.invalidate();
+        mLocalRecyclerViewWrapper.resetLocalListRecyclerView(mAdapter);
     }
 
     public GuestListRecyclerViewAdapter getAdapter() {
@@ -160,7 +145,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_clear_firebase) {
+        if (id == R.id.action_clean_up_firebase) {
             return true;
         }
 
@@ -194,33 +179,38 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater,
+                                 ViewGroup container,
                                  Bundle savedInstanceState) {
 
             int section = getArguments().getInt(ARG_SECTION_NUMBER);
+
             if (section == Const.Tabs.LOCAL_ENTRIES) {
-
-                GuestBookTabsActivity activityRef = ((GuestBookTabsActivity) getActivity());
-
-                View rootView = inflater.inflate(R.layout.fragment_recycler_list, container, false);
-
-                Toast.makeText(TheApp.getAppContext(), "We'll show local stuff here", Toast.LENGTH_SHORT).show();
-
-                activityRef.setLocalListRecyclerView((RecyclerView) rootView.findViewById(R.id.listRecyclerView) );
-
-                LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-                activityRef.getLocalListRecyclerView().setLayoutManager(llm);
-                activityRef.getLocalListRecyclerView().setHasFixedSize(true);
-
-                activityRef.getLocalListRecyclerView().setAdapter(((GuestBookTabsActivity) getActivity()).getAdapter());
-
-                return rootView;
+               return getLocalListRootView(inflater, container);
             }
 
             View rootView = inflater.inflate(R.layout.tab_fragment_guest_book, container, false);
 
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, section));
+
+            return rootView;
+        }
+
+        private View getLocalListRootView(LayoutInflater inflater, ViewGroup container) {
+
+            View rootView = inflater.inflate(R.layout.fragment_recycler_list, container, false);
+
+            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.listRecyclerView);
+
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(llm);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(((GuestBookTabsActivity) getActivity()).getAdapter());
+
+            ((GuestBookTabsActivity) getActivity())
+                    .mLocalRecyclerViewWrapper
+                    .setLocalListRecyclerView(recyclerView);
 
             return rootView;
         }
