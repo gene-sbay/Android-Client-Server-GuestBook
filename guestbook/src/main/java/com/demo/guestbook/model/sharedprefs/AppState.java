@@ -18,6 +18,21 @@ public class AppState {
         return mLocalGuestEntries;
     }
 
+    public GuestEntry getLocalGuestEntryById(String id) {
+
+        verifyLocalGuestEntries();
+
+        GuestEntry searchGuestEntry = null;
+        for (GuestEntry guestEntry : mLocalGuestEntries) {
+
+            if (id.equals(guestEntry.getId())) {
+                searchGuestEntry = guestEntry;
+                break;
+            }
+        }
+        return searchGuestEntry;
+    }
+
     public void addLocalGuestEntry(GuestEntry guestEntry) {
         verifyLocalGuestEntries();
         mLocalGuestEntries.add(guestEntry);

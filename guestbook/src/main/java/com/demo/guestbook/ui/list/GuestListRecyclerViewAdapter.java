@@ -1,16 +1,17 @@
 package com.demo.guestbook.ui.list;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.demo.guestbook.activity.AddGuestLogActivity;
 import com.demo.guestbook.databinding.ListGuestCardBinding;
 import com.demo.guestbook.model.pojo.GuestEntry;
-import com.demo.guestbook.util.TheApp;
+import com.demo.guestbook.util.Const;
 
 import java.util.List;
 
@@ -30,10 +31,12 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
         }
     }
 
+    private Activity mActivity;
     private List<GuestEntry> mGuestEntries;
     private boolean mIsEditAllowed = false;
 
-    public GuestListRecyclerViewAdapter(List<GuestEntry> guestEntries, boolean isEditAllowed) {
+    public GuestListRecyclerViewAdapter(Activity activity, List<GuestEntry> guestEntries, boolean isEditAllowed) {
+        mActivity = activity;
         mGuestEntries = guestEntries;
         mIsEditAllowed = isEditAllowed;
     }
@@ -56,8 +59,10 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
             binding.editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String id = binding.getGuestEntry().getId();
-                    Toast.makeText(TheApp.getAppContext(), "My Edit with id: " + id, Toast.LENGTH_SHORT).show();
+                    String guestEntryId = binding.getGuestEntry().getId();
+                    Intent intent = new Intent(mActivity, AddGuestLogActivity.class);
+                    intent.putExtra(Const.Extra.GUEST_ENTRY_ID, guestEntryId);
+                    mActivity.startActivity(intent);
                 }
             });
         }

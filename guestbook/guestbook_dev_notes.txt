@@ -11,6 +11,8 @@ FIREBASE NOTES
 
 ==========================
 FIREBASE Dev-DETAILS of INTEREST
+- Decent facilities and pattern for accessing Firebase database
+- Clean Up logic for server data considered invalid (see Options in Tabs View)
 
 
 ==========================
@@ -20,7 +22,7 @@ UI Dev-DETAILS of INTEREST
 - Data binding for single form
 - Up navigation
 - FlatUI project
-
+- Reusable facilities for Tabs/List(s) view .. via GuestEntryRecyclerView
 
 
 ==========================
@@ -31,7 +33,7 @@ UI Dev-DETAILS of INTEREST
 - SharedPrefs facilities
 - Model, ViewModel, & Mapper Patterns
 - public class TheApp extends Application for "global" Context reference
-- Validation design pattern for input
+- Validation design pattern for input, including correct Regex for Zipcode
 - Validation through reflection has been started; means you can don't have to do it field by field, just pass in the POJO
 
 

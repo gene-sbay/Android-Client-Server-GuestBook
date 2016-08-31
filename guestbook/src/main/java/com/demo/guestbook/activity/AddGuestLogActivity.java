@@ -2,6 +2,7 @@ package com.demo.guestbook.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -42,6 +43,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
     private ActivityAddGuestLogBinding mActivityAddGuestLogBinding;
     private GuestEntry mGuestEntry;
     private DatePickerHelper mDatePickerHelper;
+    private boolean mIsInEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +52,34 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         // Default theme should be set before content view is added
         FlatUI.setDefaultTheme(Const.APP_THEME);
 
-        // No need to add a setContentView(), we will use DataBinding to set the contentView
-        mActivityAddGuestLogBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_guest_log);
-        mGuestEntryViewModel = new GuestEntryViewModel();
-        mActivityAddGuestLogBinding.setGuestEntryViewModel(mGuestEntryViewModel);
-
         Firebase.setAndroidContext(this);
+
+        setEditor();
 
         initLayout();
         initSubmitHandlers();
+    }
+
+    private void setEditor() {
+
+        Intent intent = getIntent();
+        String guestEntryId = intent.getStringExtra(Const.Extra.GUEST_ENTRY_ID);
+        if (guestEntryId != null) {
+            mIsInEditMode = true;
+        }
+
+        if (mIsInEditMode ) {
+            GuestEntryMapper mapper = new GuestEntryMapper();
+            GuestEntry guestEntry = AppStateDao.getAppState().getLocalGuestEntryById(guestEntryId);
+            mGuestEntryViewModel = mapper.map(guestEntry);
+        }
+        else {
+            mGuestEntryViewModel = new GuestEntryViewModel();
+        }
+
+        // No need to add a setContentView(), we will use DataBinding to set the contentView
+        mActivityAddGuestLogBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_guest_log);
+        mActivityAddGuestLogBinding.setGuestEntryViewModel(mGuestEntryViewModel);
     }
 
     private void initLayout() {

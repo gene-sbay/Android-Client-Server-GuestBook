@@ -48,7 +48,7 @@ public abstract class GuestEntryRecyclerView {
     private GuestListRecyclerViewAdapter getAdapter() {
 
         List<GuestEntry> guestEntries = getGuestEntries();
-        return new GuestListRecyclerViewAdapter(guestEntries, isEditAllowed());
+        return new GuestListRecyclerViewAdapter(mActivity, guestEntries, isEditAllowed());
     }
 }
 
