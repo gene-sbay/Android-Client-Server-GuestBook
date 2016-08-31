@@ -1,5 +1,6 @@
 package com.demo.guestbook.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,16 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cengalabs.flatui.FlatUI;
 import com.demo.guestbook.R;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
-import com.demo.guestbook.ui.list.GuestListRecyclerViewAdapter;
-import com.demo.guestbook.ui.list.RecyclerViewWrapper;
+import com.demo.guestbook.ui.list.GuestEntryRecyclerView;
 import com.demo.guestbook.util.Const;
-import com.demo.guestbook.util.TheApp;
 
 import java.util.List;
 
@@ -42,12 +39,8 @@ public class GuestBookTabsActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private RecyclerViewWrapper mLocalRecyclerViewWrapper;
-    // private RecyclerView mLocalListRecyclerView;
-    private RecyclerView mGlobalListRecyclerView;
-
-    private GuestListRecyclerViewAdapter mAdapter;
-
+    private LocalGuestEntryRecyclerView mLocalGuestEntryRecyclerView;
+    private GlobalGuestEntryRecyclerView mGlobalGuestEntryRecyclerView;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -73,7 +66,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mLocalRecyclerViewWrapper = new RecyclerViewWrapper();
+        mLocalGuestEntryRecyclerView = new LocalGuestEntryRecyclerView(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -93,6 +86,32 @@ public class GuestBookTabsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    class LocalGuestEntryRecyclerView extends GuestEntryRecyclerView {
+
+        public LocalGuestEntryRecyclerView(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public List<GuestEntry> getGuestEntries() {
+            List<GuestEntry> localGuestEntries = AppStateDao.getAppState().getLocalGuestEntries();
+            return localGuestEntries;
+        }
+    }
+
+    class GlobalGuestEntryRecyclerView extends GuestEntryRecyclerView {
+
+        public GlobalGuestEntryRecyclerView(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public List<GuestEntry> getGuestEntries() {
+            List<GuestEntry> localGuestEntries = AppStateDao.getAppState().getServerGuestEntries();
+            return localGuestEntries;
+        }
     }
 
     private void loadAddGuestLogActivity() {
@@ -117,17 +136,8 @@ public class GuestBookTabsActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        mLocalRecyclerViewWrapper.resetLocalListRecyclerView(mAdapter);
-    }
 
-    public GuestListRecyclerViewAdapter getAdapter() {
-
-        if (mAdapter == null) {
-            List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
-            mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
-        }
-
-        return mAdapter;
+        mLocalGuestEntryRecyclerView.resetLocalListRecyclerView();
     }
 
     @Override
@@ -203,14 +213,9 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.listRecyclerView);
 
-            LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(llm);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setAdapter(((GuestBookTabsActivity) getActivity()).getAdapter());
-
             ((GuestBookTabsActivity) getActivity())
-                    .mLocalRecyclerViewWrapper
-                    .setLocalListRecyclerView(recyclerView);
+                        .mLocalGuestEntryRecyclerView
+                        .setRecyclerView(recyclerView);
 
             return rootView;
         }
