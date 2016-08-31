@@ -108,4 +108,32 @@ public class GuestEntryMapper {
 
         return invalidGuestEntryIds;
     }
+
+    public List<DataSnapshot> getInvalidGuestEntryDataSnapshots(DataSnapshot guestLogSnapshot) {
+
+        List<DataSnapshot> invalidGuestEntrySnapshots = new ArrayList<>();
+
+        Iterable<DataSnapshot> dataSnapshots = guestLogSnapshot.getChildren();
+        for (DataSnapshot guestEntryDataSnapshot : dataSnapshots) {
+
+            Iterable<DataSnapshot> dataSnapshotFields = guestEntryDataSnapshot.getChildren();
+
+            boolean idFieldFound = false;
+
+            for (DataSnapshot dataSnapshotField : dataSnapshotFields) {
+
+                String childKey = dataSnapshotField.getKey();
+                if (childKey.equals(Const.Field.ID)) {
+                    idFieldFound = true;
+                    break;
+                }
+            }
+
+            if ( ! idFieldFound ) {
+                invalidGuestEntrySnapshots.add(guestEntryDataSnapshot);
+            }
+        }
+
+        return invalidGuestEntrySnapshots;
+    }
 }

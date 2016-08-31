@@ -1,6 +1,7 @@
 package com.demo.guestbook.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,13 +19,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cengalabs.flatui.FlatUI;
 import com.demo.guestbook.R;
+import com.demo.guestbook.model.mapper.GuestEntryMapper;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
+import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.ui.list.GuestEntryRecyclerView;
+import com.demo.guestbook.ui.util.CleanUpFirebaseDialog;
 import com.demo.guestbook.util.Const;
+import com.demo.guestbook.util.Logr;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
 
 import java.util.List;
 
@@ -67,6 +76,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mLocalGuestEntryRecyclerView = new LocalGuestEntryRecyclerView(this);
+        mGlobalGuestEntryRecyclerView = new GlobalGuestEntryRecyclerView(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -109,8 +119,8 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
         @Override
         public List<GuestEntry> getGuestEntries() {
-            List<GuestEntry> localGuestEntries = AppStateDao.getAppState().getServerGuestEntries();
-            return localGuestEntries;
+            List<GuestEntry> serverGuestEntries = AppStateDao.getAppState().getServerGuestEntries();
+            return serverGuestEntries;
         }
     }
 
@@ -138,6 +148,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         super.onPostResume();
 
         mLocalGuestEntryRecyclerView.resetLocalListRecyclerView();
+        mGlobalGuestEntryRecyclerView.resetLocalListRecyclerView();
     }
 
     @Override
@@ -156,11 +167,13 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_clean_up_firebase) {
+            new CleanUpFirebaseDialog(GuestBookTabsActivity.this).show();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -199,12 +212,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
                return getLocalListRootView(inflater, container);
             }
 
-            View rootView = inflater.inflate(R.layout.tab_fragment_guest_book, container, false);
-
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, section));
-
-            return rootView;
+            return getGlobalListRootView(inflater, container);
         }
 
         private View getLocalListRootView(LayoutInflater inflater, ViewGroup container) {
@@ -215,6 +223,19 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
             ((GuestBookTabsActivity) getActivity())
                         .mLocalGuestEntryRecyclerView
+                        .setRecyclerView(recyclerView);
+
+            return rootView;
+        }
+
+        private View getGlobalListRootView(LayoutInflater inflater, ViewGroup container) {
+
+            View rootView = inflater.inflate(R.layout.fragment_recycler_list, container, false);
+
+            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.listRecyclerView);
+
+            ((GuestBookTabsActivity) getActivity())
+                        .mGlobalGuestEntryRecyclerView
                         .setRecyclerView(recyclerView);
 
             return rootView;
@@ -260,3 +281,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
 
 //
+//View rootView = inflater.inflate(R.layout.tab_fragment_guest_book, container, false);
+//TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+//textView.setText(getString(R.string.section_format, section));
+//return rootView;
