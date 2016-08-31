@@ -1,6 +1,7 @@
 package com.demo.guestbook.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -9,6 +10,7 @@ import com.demo.guestbook.model.mapper.GuestEntryMapper;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
 import com.demo.guestbook.remote.FirebaseEndPoint;
+import com.demo.guestbook.util.Const;
 import com.demo.guestbook.util.TheApp;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -57,8 +59,11 @@ public class StartPageActivity extends AppCompatActivity
 
         List<GuestEntry> allServerGuestEntries = mapper.getAllGuestEntries(guestLogSnapshot);
         AppStateDao.getAppState().setServerGuestEntries(allServerGuestEntries);
-        
+
         mProgressDialog.dismiss();
+
+        Intent intent = new Intent(StartPageActivity.this, GuestBookTabsActivity.class);
+        startActivity(intent);
     }
 
     @Override
