@@ -2,6 +2,7 @@
     <string name="app_name">Guest Bookly</string>
     <string name="guest_entries_title">Guest Bookly User Entries</string>
     <string name="edit">Edit It</string>
+    <string name="delete">Delete</string>
 
     <string name="add_guest_entry">Add Guest Entry</string>
     <string name="add_guest_entry_error">Data could not be saved.\n\nFirebase Error Message: %s</string>
@@ -11,6 +12,7 @@
     <string name="birthday">Birthday</string>
     <string name="zipcode">Zipcode</string>
     <string name="submit">Submit</string>
+    <string name="update">Update</string>
     <string name="success_message">We have updated your info in Guest Bookly.  Thanks for sharing %s !</string>
     <string name="please_set">Please set</string>
 

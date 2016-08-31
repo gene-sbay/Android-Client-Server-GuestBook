@@ -103,16 +103,43 @@
                     flatui:fl_fieldStyle="fl_box"
                     flatui:fl_theme="@array/grape"/>
 
-                <com.cengalabs.flatui.views.FlatButton
-                    android:id="@+id/submit_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_margin="3dp"
-                    android:text="@string/submit"
-                    flatui:fl_fieldStyle="fl_box"
-                    flatui:fl_theme="@array/grape"
-                    />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
+                    <com.cengalabs.flatui.views.FlatButton
+                        android:id="@+id/submit_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_margin="3dp"
+                        android:text="@string/submit"
+                        flatui:fl_fieldStyle="fl_box"
+                        flatui:fl_theme="@array/grape"
+                        />
+
+                    <!-- serves as a spacer for item to the right, to float right -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        />
+
+                    <com.cengalabs.flatui.views.FlatButton
+                        android:id="@+id/delete_btn"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_margin="3dp"
+                        android:text="@string/delete"
+                        flatui:fl_fieldStyle="fl_box"
+                        flatui:fl_theme="@array/orange"
+                        />
+
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>

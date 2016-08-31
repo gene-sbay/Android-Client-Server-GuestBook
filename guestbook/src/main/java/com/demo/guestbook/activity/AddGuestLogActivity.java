@@ -27,6 +27,7 @@ import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.ui.util.DatePickerHelper;
 import com.demo.guestbook.ui.util.DialogUtil;
 import com.demo.guestbook.util.Const;
+import com.demo.guestbook.util.TheApp;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -68,7 +69,15 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
             mIsInEditMode = true;
         }
 
+
+        String submitText = TheApp.findString(R.string.submit);
+        int deleteButtonVisibility = View.GONE;
+
         if (mIsInEditMode ) {
+
+            submitText = TheApp.findString(R.string.update);
+            deleteButtonVisibility = View.VISIBLE;
+
             GuestEntryMapper mapper = new GuestEntryMapper();
             GuestEntry guestEntry = AppStateDao.getAppState().getLocalGuestEntryById(guestEntryId);
             mGuestEntryViewModel = mapper.map(guestEntry);
@@ -77,8 +86,11 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
             mGuestEntryViewModel = new GuestEntryViewModel();
         }
 
-        // No need to add a setContentView(), we will use DataBinding to set the contentView
         mActivityAddGuestLogBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_guest_log);
+        mActivityAddGuestLogBinding.submitBtn.setText(submitText);
+        mActivityAddGuestLogBinding.deleteBtn.setVisibility(deleteButtonVisibility);
+
+        // No need to add a setContentView(), we will use DataBinding to set the contentView
         mActivityAddGuestLogBinding.setGuestEntryViewModel(mGuestEntryViewModel);
     }
 
