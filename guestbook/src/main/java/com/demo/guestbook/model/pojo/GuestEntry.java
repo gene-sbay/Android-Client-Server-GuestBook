@@ -1,6 +1,9 @@
 package com.demo.guestbook.model.pojo;
 
 import com.demo.guestbook.model.validator.GuestEntryValidator;
+import com.demo.guestbook.util.DeviceUtil;
+
+import java.util.Calendar;
 
 /**
  * A Simple POJO class containing a BaseObservable String.
@@ -15,6 +18,10 @@ public class GuestEntry {
     private String lastName;
     private String birthday;
     private String zipcode;
+
+    public GuestEntry() {
+        id = getNextDatabaseId();
+    }
 
     public String getId() {
         return id;
@@ -55,4 +62,17 @@ public class GuestEntry {
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
+
+    private String getNextDatabaseId() {
+
+        long timeL = Calendar.getInstance().getTimeInMillis();
+        String deviceId = DeviceUtil.getDeviceId();
+
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(timeL);
+        stringBuffer.append('-');
+        stringBuffer.append(deviceId);
+        return stringBuffer.toString();
+    }
+
 }

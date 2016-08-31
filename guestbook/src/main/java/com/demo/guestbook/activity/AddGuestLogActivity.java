@@ -36,7 +36,7 @@ import com.firebase.client.FirebaseError;
  */
 
 public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
-    implements FirebaseEndPoint.Listener {
+    implements FirebaseEndPoint.SetValueListener {
 
     private GuestEntryViewModel mGuestEntryViewModel;
     private ActivityAddGuestLogBinding mActivityAddGuestLogBinding;

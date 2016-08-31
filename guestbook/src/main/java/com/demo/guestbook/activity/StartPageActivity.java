@@ -1,16 +1,17 @@
 package com.demo.guestbook.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.demo.guestbook.R;
+import com.demo.guestbook.async.StartupBackgroundTask;
 import com.demo.guestbook.remote.FirebaseEndPoint;
-import com.demo.guestbook.ui.util.DialogUtil;
 import com.demo.guestbook.util.TheApp;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 
 /**
@@ -18,9 +19,10 @@ import com.firebase.client.Firebase;
  * 1. SharedPref data
  * 2. Remote data if it's available
  */
-public class StartPageActivity extends AppCompatActivity {
+public class StartPageActivity extends AppCompatActivity
+    implements FirebaseEndPoint.DataSnapshotListener {
 
-    private ProgressDialog mProgressDialog;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,53 +31,56 @@ public class StartPageActivity extends AppCompatActivity {
 
         Firebase.setAndroidContext(this);
 
-        new StartupBackgroundTask().execute();
+        progressDialog = getVisibleProgressDialog();
+
+        new FirebaseEndPoint().testGetAll(this);
     }
 
     private ProgressDialog getVisibleProgressDialog() {
         return ProgressDialog.show(StartPageActivity.this,
-                            TheApp.findString(R.string.app_name),
-                            "Loading app data ...",
-                            true, false);
+                TheApp.findString(R.string.app_name),
+                "Loading app data ...",
+                true, false);
     }
 
-    class StartupBackgroundTask extends AsyncTask<Void, Void, Boolean> {
 
-        @Override
-        protected void onPreExecute() {
-            mProgressDialog = getVisibleProgressDialog();
-        }
+    @Override
+    public void onDataChange(DataSnapshot snapshot) {
 
-        @Override
-        protected void onPostExecute(Boolean result) {
+        /*
+                        long childrenCount = snapshot.getChildrenCount();
+                Iterable<DataSnapshot> dataSnapshots = snapshot.getChildren();
+                for (DataSnapshot dataSnapshot : dataSnapshots) {
 
-            if (result == false) {
-                DialogUtil.getErrorAlertDialog(StartPageActivity.this, "Error on Start Up").show();
-                return;
-            }
+                    String key = dataSnapshot.getKey();
 
-            mProgressDialog.dismiss();
+                    // String val = dataSnapshot.child("id").getValue().toString();
+                    //Logr.d("val = " + val);
 
-            Intent intent = new Intent(StartPageActivity.this, GuestBookTabsActivity.class);
-            startActivity(intent);
-        }
+                    Iterable<DataSnapshot> dataSnapshotKids = dataSnapshot.getChildren();
 
-        @Override
-        protected Boolean doInBackground(Void... voids) {
+                    for (DataSnapshot dataSnapshotKid : dataSnapshotKids) {
 
-            new FirebaseEndPoint().testGetAll();
+                        String childKey = dataSnapshotKid.getKey();
+                        Object valObj = dataSnapshotKid.getValue();
+                        if (valObj != null) {
+                            String val = valObj.toString();
+                            Logr.d("val = " + val);
+                        }
+                    }
+                }
 
-            // Place holder sleep . Will replace with Firebase service look up
+                Object dataSnapshot = snapshot.getValue();
+                System.out.println(dataSnapshot);
 
-            try {
-                Thread.sleep(2000);
-            }
-            catch (Exception e) {
-
-            }
-            return true;
-        }
+         */
+        progressDialog.dismiss();
     }
 
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+
+        progressDialog.dismiss();
+    }
 }
 
