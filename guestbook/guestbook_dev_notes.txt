@@ -28,5 +28,7 @@ UI Dev-DETAILS of INTEREST
 - SharedPrefs facilities
 - Model, ViewModel, & Mapper Patterns
 - public class TheApp extends Application for "global" Context reference
-- Validation pattern for input
+- Validation design pattern for input
+- Validation through reflection has been started; means you can don't have to do it field by field, just pass in the POJO
+
 

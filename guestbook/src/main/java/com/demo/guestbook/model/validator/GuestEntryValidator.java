@@ -12,6 +12,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * With more time, I would add this solution with inline error messages
+ *
+     EditText firstName = (EditText)findViewById(R.id.first_name);
+     if( firstName.getText().toString().length() == 0 )
+        firstName.setError( "First name is required!" );
+
+    Additionally, could do this with listeners for the event when user lives an input field,
+    and then do validation there
+ */
 public class GuestEntryValidator {
 
     private final static String ZIPCODE_FORMAT_ERROR = "Please enter a valid zip code";
