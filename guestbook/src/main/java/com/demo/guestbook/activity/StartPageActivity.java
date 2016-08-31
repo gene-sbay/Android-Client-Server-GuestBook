@@ -18,9 +18,10 @@ import com.firebase.client.FirebaseError;
  * 2. Remote data if it's available
  */
 public class StartPageActivity extends AppCompatActivity
-    implements FirebaseEndPoint.DataSnapshotListener {
+        implements FirebaseEndPoint.DataSnapshotListener {
 
-    ProgressDialog progressDialog;
+    private ProgressDialog mProgressDialog;
+    private FirebaseEndPoint mFirebaseEndPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,11 @@ public class StartPageActivity extends AppCompatActivity
 
         Firebase.setAndroidContext(this);
 
-        progressDialog = getVisibleProgressDialog();
+        mProgressDialog = getVisibleProgressDialog();
 
-        new FirebaseEndPoint().testGetAll(this);
+        mFirebaseEndPoint = new FirebaseEndPoint();
+
+        mFirebaseEndPoint.guestLogGetAll(this);
     }
 
     private ProgressDialog getVisibleProgressDialog() {
@@ -43,43 +46,17 @@ public class StartPageActivity extends AppCompatActivity
 
 
     @Override
-    public void onDataChange(DataSnapshot snapshot) {
+    public void onDataChange(DataSnapshot guestLogSnapshot) {
 
-        /*
-                        long childrenCount = snapshot.getChildrenCount();
-                Iterable<DataSnapshot> dataSnapshots = snapshot.getChildren();
-                for (DataSnapshot dataSnapshot : dataSnapshots) {
+        mFirebaseEndPoint.doGuestLogIteration(guestLogSnapshot);
 
-                    String key = dataSnapshot.getKey();
-
-                    // String val = dataSnapshot.child("id").getValue().toString();
-                    //Logr.d("val = " + val);
-
-                    Iterable<DataSnapshot> dataSnapshotKids = dataSnapshot.getChildren();
-
-                    for (DataSnapshot dataSnapshotKid : dataSnapshotKids) {
-
-                        String childKey = dataSnapshotKid.getKey();
-                        Object valObj = dataSnapshotKid.getValue();
-                        if (valObj != null) {
-                            String val = valObj.toString();
-                            Logr.d("val = " + val);
-                        }
-                    }
-                }
-
-                Object dataSnapshot = snapshot.getValue();
-                System.out.println(dataSnapshot);
-
-         */
-
-        progressDialog.dismiss();
+        mProgressDialog.dismiss();
     }
 
     @Override
     public void onCancelled(FirebaseError firebaseError) {
 
-        progressDialog.dismiss();
+        mProgressDialog.dismiss();
     }
 }
 

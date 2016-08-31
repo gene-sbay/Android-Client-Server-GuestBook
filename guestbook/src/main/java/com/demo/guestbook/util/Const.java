@@ -6,6 +6,11 @@ public class Const {
 
     public final static int APP_THEME = R.array.grape;
 
+    public class Field {
+
+        public final static String ID = "id";
+    }
+
     public class Regex {
 
         public final static String ZIPCODE = "^[0-9]{5}(?:-[0-9]{4})?$";
@@ -35,5 +40,6 @@ public class Const {
 
         public final static String PROJECT_URL = "https://guest-bookly.firebaseio.com";
         public final static String GUEST_LOG = "guest_log";
+        public final static String GUEST_LOG_URL = PROJECT_URL + "/" + GUEST_LOG;
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 
 import com.demo.guestbook.R;
+import com.demo.guestbook.model.mapper.GuestEntryMapper;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.util.Const;
 import com.demo.guestbook.util.Logr;
@@ -52,6 +53,23 @@ public class FirebaseEndPoint {
         });
     }
 
+    public void remove(DataSnapshot dataSnapshot, final SetValueListener firebaseSetValueListener) {
+
+        dataSnapshot.getRef().removeValue(new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                if (firebaseError != null) {
+                    Logr.e("Failed to setValue via Firebase");
+                    firebaseSetValueListener.onFirebaseError(firebaseError);
+                }
+                else {
+                    Logr.d("Data saved successfully.");
+                    firebaseSetValueListener.onFirebaseSuccess();
+                }
+            }
+        });
+    }
+
 
     private ProgressDialog getVisibleProgressDialog(Activity activity) {
         return ProgressDialog.show(activity,
@@ -60,9 +78,9 @@ public class FirebaseEndPoint {
                 true, false);
     }
 
-    public void testGetAll(final DataSnapshotListener dataSnapshotListener) {
+    public void guestLogGetAll(final DataSnapshotListener dataSnapshotListener) {
 
-        Firebase guestLogRef = new com.firebase.client.Firebase("https://guest-bookly.firebaseio.com/guest_log");
+        Firebase guestLogRef = new com.firebase.client.Firebase(Const.Firebase.GUEST_LOG_URL);
 
         guestLogRef.addValueEventListener(new ValueEventListener() {
 
@@ -79,4 +97,80 @@ public class FirebaseEndPoint {
         });
     }
 
+    public void doGuestLogIteration(DataSnapshot guestLogSnapshot) {
+
+        GuestEntryMapper mapper = new GuestEntryMapper();
+
+        long childrenCount = guestLogSnapshot.getChildrenCount();
+        Iterable<DataSnapshot> dataSnapshots = guestLogSnapshot.getChildren();
+        for (DataSnapshot guestEntryDataSnapshot : dataSnapshots) {
+
+            String guestEntryKey = guestEntryDataSnapshot.getKey();
+
+            GuestEntry guestEntry = mapper.map(guestEntryDataSnapshot);
+
+            Iterable<DataSnapshot> dataSnapshotFields = guestEntryDataSnapshot.getChildren();
+
+            boolean idFieldFound = false;
+
+            for (DataSnapshot dataSnapshotField : dataSnapshotFields) {
+
+                String childKey = dataSnapshotField.getKey();
+
+                if (childKey.equals(Const.Field.ID)) {
+                    idFieldFound = true;
+                    break;
+                }
+
+                Object valObj = dataSnapshotField.getValue();
+                if (valObj != null) {
+                    String val = valObj.toString();
+                    Logr.d("val = " + val);
+                }
+            }
+        }
+    }
+
+
+    public void removeNodesWithoutIdField(DataSnapshot guestLogSnapshot) {
+
+        Iterable<DataSnapshot> dataSnapshots = guestLogSnapshot.getChildren();
+        for (DataSnapshot guestEntryDataSnapshot : dataSnapshots) {
+
+            Iterable<DataSnapshot> dataSnapshotFields = guestEntryDataSnapshot.getChildren();
+
+            boolean idFieldFound = false;
+
+            for (DataSnapshot dataSnapshotField : dataSnapshotFields) {
+
+                String childKey = dataSnapshotField.getKey();
+                if (childKey.equals(Const.Field.ID)) {
+                    idFieldFound = true;
+                    break;
+                }
+            }
+
+            if ( ! idFieldFound ) {
+                guestEntryDataSnapshot.getRef().removeValue();
+            }
+        }
+    }
+
+    public static String getStringValue(String key, DataSnapshot dataSnapshot) {
+
+        String value = "";
+
+        DataSnapshot valueObject = dataSnapshot.child(key);
+
+        try {
+            if (valueObject != null) {
+                value = valueObject.getValue().toString();
+            }
+        }
+        catch (NullPointerException npEx) {
+            npEx.printStackTrace();
+        }
+
+        return value;
+    }
 }
