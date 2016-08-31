@@ -4,10 +4,13 @@ implementation, including why certain design/implementation choices
 were made
 
 =================
-FIREBASE
-
+FIREBASE NOTES
 1. At the moment opting to NOT require that there is auth to write to the db
 
+
+
+==========================
+FIREBASE Dev-DETAILS of INTEREST
 
 
 ==========================

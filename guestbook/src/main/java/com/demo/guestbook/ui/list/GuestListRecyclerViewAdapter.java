@@ -31,9 +31,11 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
     }
 
     private List<GuestEntry> mGuestEntries;
+    private boolean mIsEditAllowed = false;
 
-    public GuestListRecyclerViewAdapter(List<GuestEntry> guestEntries){
+    public GuestListRecyclerViewAdapter(List<GuestEntry> guestEntries, boolean isEditAllowed) {
         mGuestEntries = guestEntries;
+        mIsEditAllowed = isEditAllowed;
     }
 
     @Override
@@ -45,13 +47,20 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
     public GuestEntryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         final ListGuestCardBinding binding = ListGuestCardBinding.inflate(layoutInflater);
-        binding.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String id = binding.getGuestEntry().getId();
-                Toast.makeText(TheApp.getAppContext(), "My Edit with id: " + id, Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        if ( ! mIsEditAllowed ) {
+            binding.editButton.setVisibility(View.GONE);
+        }
+        else {
+            binding.editButton.setVisibility(View.VISIBLE);
+            binding.editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String id = binding.getGuestEntry().getId();
+                    Toast.makeText(TheApp.getAppContext(), "My Edit with id: " + id, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
         return new GuestEntryViewHolder(binding.getRoot());
     }
 

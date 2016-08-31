@@ -1,7 +1,6 @@
 package com.demo.guestbook.activity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,21 +16,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cengalabs.flatui.FlatUI;
 import com.demo.guestbook.R;
-import com.demo.guestbook.model.mapper.GuestEntryMapper;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
-import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.ui.list.GuestEntryRecyclerView;
 import com.demo.guestbook.ui.util.CleanUpFirebaseDialog;
 import com.demo.guestbook.util.Const;
-import com.demo.guestbook.util.Logr;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
 
 import java.util.List;
 
@@ -105,6 +96,11 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         }
 
         @Override
+        public boolean isEditAllowed() {
+            return true;
+        }
+
+        @Override
         public List<GuestEntry> getGuestEntries() {
             List<GuestEntry> localGuestEntries = AppStateDao.getAppState().getLocalGuestEntries();
             return localGuestEntries;
@@ -115,6 +111,11 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
         public GlobalGuestEntryRecyclerView(Activity activity) {
             super(activity);
+        }
+
+        @Override
+        public boolean isEditAllowed() {
+            return false;
         }
 
         @Override

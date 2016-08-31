@@ -11,6 +11,7 @@ import java.util.List;
 public abstract class GuestEntryRecyclerView {
 
     abstract public List<GuestEntry> getGuestEntries();
+    abstract public boolean isEditAllowed();
 
     private Activity mActivity;
     private RecyclerView mRecyclerView;
@@ -24,15 +25,12 @@ public abstract class GuestEntryRecyclerView {
 
         mRecyclerView = recyclerView;
 
-        List<GuestEntry> guestEntries = getGuestEntries();
-
-        mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
+        mAdapter = getAdapter();
 
         LinearLayoutManager llm = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
-
     }
 
     public void resetLocalListRecyclerView() {
@@ -42,11 +40,15 @@ public abstract class GuestEntryRecyclerView {
             return;
         }
 
-        List<GuestEntry> guestEntries = getGuestEntries();
-
-        mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
+        mAdapter = getAdapter();
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.invalidate();
+    }
+
+    private GuestListRecyclerViewAdapter getAdapter() {
+
+        List<GuestEntry> guestEntries = getGuestEntries();
+        return new GuestListRecyclerViewAdapter(guestEntries, isEditAllowed());
     }
 }
 
