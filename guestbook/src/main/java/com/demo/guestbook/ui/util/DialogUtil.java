@@ -22,10 +22,16 @@ public class DialogUtil {
         sb.append("Couldn't complete attempt for: ");
         sb.append(requestMessage);
         sb.append("\n  Please make sure you are connected to the internet and try again later");
+
+        return DialogUtil.getErrorAlertDialog(activity, "Service Error", sb.toString());
+    }
+
+    public static AlertDialog getErrorAlertDialog(Activity activity, String title, String errorMessage) {
+
         AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setCancelable(true);
-        alertDialog.setTitle("Service Error");
-        alertDialog.setMessage(sb.toString());
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(errorMessage);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Close",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

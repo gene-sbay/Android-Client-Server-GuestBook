@@ -110,7 +110,10 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         GuestEntryValidator guestEntryValidator = new GuestEntryValidator(mGuestEntry);
         boolean isValid = guestEntryValidator.isValid();
         if ( ! isValid ) {
+            String title = "Valid input error";
             String errorMessage = guestEntryValidator.getErrorMessageString();
+            new DialogUtil().getErrorAlertDialog(AddGuestLogActivity.this, title, errorMessage).show();
+
             Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -133,8 +136,9 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
     @Override
     public void onFirebaseError(FirebaseError firebaseError) {
 
+        String title = "Firebase Error";
         String message = getString(R.string.add_guest_entry_error, firebaseError.getMessage());
-        new DialogUtil().getErrorAlertDialog(AddGuestLogActivity.this, message);
+        new DialogUtil().getErrorAlertDialog(AddGuestLogActivity.this, title, message).show();
     }
 
     @Override
