@@ -28,5 +28,5 @@ UI Dev-DETAILS of INTEREST
 - SharedPrefs facilities
 - Model, ViewModel, & Mapper Patterns
 - public class TheApp extends Application for "global" Context reference
-
+- Validation pattern for input
 

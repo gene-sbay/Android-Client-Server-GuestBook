@@ -6,9 +6,19 @@ public class Const {
 
     public final static int APP_THEME = R.array.grape;
 
+    public class Regex {
+
+        public final static String ZIPCODE = "^[0-9]{5}(?:-[0-9]{4})?$";
+    }
+
     public class Extra {
 
         public final static String GUEST_ENTRY_ID = "GUEST_ENTRY_ID";
+    }
+
+    public class Dates {
+
+        public final static int DATE_PICKER_START_YEAR_OFFSET = 20;
     }
 
     public class Tabs {

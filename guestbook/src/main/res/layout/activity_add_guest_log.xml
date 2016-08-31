@@ -14,8 +14,8 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:tools="http://schemas.android.com/tools"
                   xmlns:flatui="http://schemas.android.com/apk/res-auto"
+                  xmlns:tools="http://schemas.android.com/tools"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
@@ -31,78 +31,84 @@
 
                 <com.cengalabs.flatui.views.FlatEditText
                     android:id="@+id/edittext_firstname"
-                    android:hint="@string/first_name"
                     style="@style/FlatEditText1"
+                    android:hint="@string/first_name"
+                    app:binding="@{guestEntryViewModel.firstName}"
                     flatui:fl_fieldStyle="fl_box"
-                    flatui:fl_theme="@array/grape"
-                    app:binding="@{guestEntryViewModel.firstName}"/>
+                    flatui:fl_theme="@array/grape"/>
 
 
                 <com.cengalabs.flatui.views.FlatEditText
                     android:id="@+id/edittext_lastname"
-                    android:hint="@string/last_name"
                     style="@style/FlatEditText1"
+                    android:hint="@string/last_name"
+                    app:binding="@{guestEntryViewModel.lastName}"
                     flatui:fl_fieldStyle="fl_box"
-                    flatui:fl_theme="@array/grape"
-                    app:binding="@{guestEntryViewModel.lastName}"/>
+                    flatui:fl_theme="@array/grape"/>
 
 
                 <LinearLayout
+                    android:id="@+id/birthday_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:gravity="center_vertical"
-                    android:id="@+id/birthday_layout"
-                    android:padding="10dp"
                     android:layout_marginLeft="10dp"
-                    android:orientation="horizontal" >
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
                     <com.cengalabs.flatui.views.FlatButton
                         android:id="@+id/btnChangeDate"
-                        android:text="@string/birthday"
-                        android:layout_height="45dp"
                         android:layout_width="wrap_content"
+                        android:layout_height="45dp"
                         android:layout_margin="3dp"
+                        android:text="@string/birthday"
                         flatui:fl_fieldStyle="fl_box"
                         flatui:fl_theme="@array/orange"
                         />
-<!--
--->
+                    <!--
+                    -->
 
                     <com.cengalabs.flatui.views.FlatEditText
                         android:id="@+id/edittext_birthday"
-                        android:layout_width="wrap_content"
-                        android:textStyle="bold"
-                        android:padding="10dp"
-                        app:binding="@{guestEntryViewModel.birthday}"
                         style="@style/FlatEditText1"
-                        flatui:fl_fieldStyle="fl_box"
-                        flatui:fl_theme="@array/orange"
+                        android:layout_width="wrap_content"
                         android:clickable="true"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:focusableInTouchMode="true" />
+                        android:focusableInTouchMode="true"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        app:binding="@{guestEntryViewModel.birthday}"
+                        flatui:fl_fieldStyle="fl_box"
+                        flatui:fl_theme="@array/orange"/>
                 </LinearLayout>
 
 
+                <!--
+                maxLength="10" for: 5 digits, dash, 4 digits
 
-                <!-- maxLength="11" for: 5 digits, dash, 5 digits -->
+                US ZIP code (U.S. postal code) allow both the five-digit
+                and nine-digit (called ZIP+4) formats.
+                A valid postal code should match 12345 and 12345-6789,
+                but not 1234, 123456, 123456789, or 1234-56789.
+                -->
                 <com.cengalabs.flatui.views.FlatEditText
                     android:id="@+id/edittext_zipcode"
-                    android:hint="@string/zipcode"
                     style="@style/FlatEditText1"
-                    android:maxLength="11"
-                    flatui:fl_fieldStyle="fl_box"
-                    flatui:fl_theme="@array/grape"
-                    android:inputType="number|phone"
                     android:digits="0,1,2,3,4,5,6,7,8,9,-"
-                    app:binding="@{guestEntryViewModel.zipcode}"/>
+                    android:hint="@string/zipcode"
+                    android:inputType="number|phone"
+                    android:maxLength="10"
+                    app:binding="@{guestEntryViewModel.zipcode}"
+                    flatui:fl_fieldStyle="fl_box"
+                    flatui:fl_theme="@array/grape"/>
 
                 <com.cengalabs.flatui.views.FlatButton
                     android:id="@+id/submit_btn"
-                    android:text="@string/submit"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:layout_margin="3dp"
+                    android:text="@string/submit"
                     flatui:fl_fieldStyle="fl_box"
                     flatui:fl_theme="@array/grape"
                     />

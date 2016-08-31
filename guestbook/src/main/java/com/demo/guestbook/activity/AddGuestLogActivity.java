@@ -20,6 +20,7 @@ import com.demo.guestbook.model.mapper.GuestEntryMapper;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppState;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
+import com.demo.guestbook.model.validator.GuestEntryValidator;
 import com.demo.guestbook.model.view.GuestEntryViewModel;
 import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.ui.util.DatePickerHelper;
@@ -105,6 +106,14 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
 
         GuestEntryMapper guestEntryMapper = new GuestEntryMapper();
         mGuestEntry = guestEntryMapper.map(mGuestEntryViewModel);
+
+        GuestEntryValidator guestEntryValidator = new GuestEntryValidator(mGuestEntry);
+        boolean isValid = guestEntryValidator.isValid();
+        if ( ! isValid ) {
+            String errorMessage = guestEntryValidator.getErrorMessageString();
+            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         FirebaseEndPoint firebaseEndPoint = new FirebaseEndPoint();
         firebaseEndPoint.connect();

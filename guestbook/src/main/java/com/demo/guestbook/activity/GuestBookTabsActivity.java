@@ -149,7 +149,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
                 List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
 
-                mAdapter = new GuestListRecyclerViewAdapter(getActivity(), guestEntries);
+                mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
                 mRecyclerView.setAdapter(mAdapter);
 
                 return rootView;

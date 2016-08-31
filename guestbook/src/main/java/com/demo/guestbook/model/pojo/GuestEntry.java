@@ -1,9 +1,14 @@
 package com.demo.guestbook.model.pojo;
 
+import com.demo.guestbook.model.validator.GuestEntryValidator;
+
 /**
  * A Simple POJO class containing a BaseObservable String.
  */
 public class GuestEntry {
+
+    public final static int NAME_MINIMUM_CHARS = 2;
+    public final static String NAME_FIELD_SUFFIX = "Name";
 
     private String id;
     private String firstName;

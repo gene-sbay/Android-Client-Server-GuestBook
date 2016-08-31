@@ -31,10 +31,8 @@ public class GuestListRecyclerViewAdapter extends RecyclerView.Adapter<GuestList
     }
 
     private List<GuestEntry> mGuestEntries;
-    private Activity mActivity;
 
-    public GuestListRecyclerViewAdapter(Activity activity, List<GuestEntry> guestEntries){
-        mActivity = activity;
+    public GuestListRecyclerViewAdapter(List<GuestEntry> guestEntries){
         mGuestEntries = guestEntries;
     }
 

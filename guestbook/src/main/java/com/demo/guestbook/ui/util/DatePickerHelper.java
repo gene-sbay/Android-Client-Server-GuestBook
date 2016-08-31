@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.demo.guestbook.R;
+import com.demo.guestbook.util.Const;
 
 import java.util.Calendar;
 
@@ -39,7 +40,7 @@ public class DatePickerHelper {
     public void setCurrentDateOnView() {
 
         final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
+        mYear = c.get(Calendar.YEAR) - Const.Dates.DATE_PICKER_START_YEAR_OFFSET;
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
     }
