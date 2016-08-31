@@ -39,6 +39,10 @@ public class GuestBookTabsActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    private RecyclerView mLocalListRecyclerView;
+    private GuestListRecyclerViewAdapter mAdapter;
+
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -102,7 +106,42 @@ public class GuestBookTabsActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        resetRecyclerView();
+    }
 
+    public RecyclerView getLocalListRecyclerView() {
+        return mLocalListRecyclerView;
+    }
+
+    public void setLocalListRecyclerView(RecyclerView recyclerView) {
+        mLocalListRecyclerView = recyclerView;
+    }
+
+    private void resetRecyclerView() {
+
+        // hasn't been initialized yet
+        if (mLocalListRecyclerView == null) {
+            return;
+        }
+
+        List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
+        mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
+        mLocalListRecyclerView.setAdapter(mAdapter);
+        mLocalListRecyclerView.invalidate();
+    }
+
+    public GuestListRecyclerViewAdapter getAdapter() {
+
+        if (mAdapter == null) {
+            List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
+            mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
+        }
+
+        return mAdapter;
+    }
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -115,6 +154,7 @@ public class GuestBookTabsActivity extends AppCompatActivity {
 
         public GuestBookTabsFragment() {
         }
+
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -135,22 +175,19 @@ public class GuestBookTabsActivity extends AppCompatActivity {
             int section = getArguments().getInt(ARG_SECTION_NUMBER);
             if (section == Const.Tabs.LOCAL_ENTRIES) {
 
+                GuestBookTabsActivity activityRef = ((GuestBookTabsActivity) getActivity());
+
                 View rootView = inflater.inflate(R.layout.fragment_recycler_list, container, false);
 
                 Toast.makeText(TheApp.getAppContext(), "We'll show local stuff here", Toast.LENGTH_SHORT).show();
 
-                RecyclerView mRecyclerView;
-                GuestListRecyclerViewAdapter mAdapter;
+                activityRef.setLocalListRecyclerView((RecyclerView) rootView.findViewById(R.id.listRecyclerView) );
 
-                mRecyclerView = (RecyclerView) rootView.findViewById(R.id.listRecyclerView);
                 LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(llm);
-                mRecyclerView.setHasFixedSize(true);
+                activityRef.getLocalListRecyclerView().setLayoutManager(llm);
+                activityRef.getLocalListRecyclerView().setHasFixedSize(true);
 
-                List<GuestEntry> guestEntries = AppStateDao.getAppState().getLocalGuestEntries();
-
-                mAdapter = new GuestListRecyclerViewAdapter(guestEntries);
-                mRecyclerView.setAdapter(mAdapter);
+                activityRef.getLocalListRecyclerView().setAdapter(((GuestBookTabsActivity) getActivity()).getAdapter());
 
                 return rootView;
             }
