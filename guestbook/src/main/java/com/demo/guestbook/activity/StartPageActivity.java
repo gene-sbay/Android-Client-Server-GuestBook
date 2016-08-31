@@ -1,12 +1,10 @@
 package com.demo.guestbook.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.demo.guestbook.R;
-import com.demo.guestbook.async.StartupBackgroundTask;
 import com.demo.guestbook.remote.FirebaseEndPoint;
 import com.demo.guestbook.util.TheApp;
 import com.firebase.client.DataSnapshot;
@@ -74,6 +72,7 @@ public class StartPageActivity extends AppCompatActivity
                 System.out.println(dataSnapshot);
 
          */
+
         progressDialog.dismiss();
     }
 
