@@ -57,7 +57,7 @@ public class DeleteGuestEntryDialog {
         @Override
         public void onFirebaseSuccess() {
             String message = "Delete Guest Entry request is successful.";
-            Toast.makeText(TheApp.getAppContext(), message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(TheApp.getAppContext(), message, Toast.LENGTH_LONG).show();
             Logr.d(message);
 
             AppState appState = AppStateDao.getAppState();
