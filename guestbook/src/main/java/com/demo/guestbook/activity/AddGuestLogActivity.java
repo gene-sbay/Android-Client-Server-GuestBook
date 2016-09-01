@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
@@ -61,7 +62,21 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
 
         initLayout();
         initSubmitHandlers();
+
+        // Will call run method once view is drawn
+        mActivityAddGuestLogBinding.deleteBtn.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (isInEditMode()) {
+                    InputUtil.hideKeyboard(mActivityAddGuestLogBinding.edittextBirthday);
+                }
+            }
+        });
+
     }
+
+
+
     private boolean isInEditMode() {
         return mEditNodeId != null;
     };
@@ -81,8 +96,6 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
             GuestEntryMapper mapper = new GuestEntryMapper();
             final GuestEntry guestEntry = AppStateDao.getAppState().getLocalGuestEntryById(mEditNodeId);
             mGuestEntryViewModel = mapper.map(guestEntry);
-
-            InputUtil.hideKeyboard(mActivityAddGuestLogBinding.submitBtn);
 
             mActivityAddGuestLogBinding.deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
