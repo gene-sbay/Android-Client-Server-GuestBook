@@ -1,21 +1,12 @@
 package com.demo.guestbook.remote;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-
-import com.demo.guestbook.R;
-import com.demo.guestbook.model.mapper.GuestEntryMapper;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.util.Const;
 import com.demo.guestbook.util.Logr;
-import com.demo.guestbook.util.TheApp;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FirebaseEndPoint {
 
@@ -35,13 +26,19 @@ public class FirebaseEndPoint {
         mRootRef = new com.firebase.client.Firebase(Const.Firebase.PROJECT_URL);
     }
 
+    public Firebase getGuestEntryNode(String guestEntryId) {
+        Firebase guestLogRef = new com.firebase.client.Firebase(Const.Firebase.GUEST_LOG_URL);
+        Firebase guestEntryNode = guestLogRef.child(guestEntryId);
+        return guestEntryNode;
+    }
+
     public void save(GuestEntry guestEntry, final SetValueListener firebaseSetValueListener) {
 
         String nodeId = guestEntry.getId();
 
-        com.firebase.client.Firebase guestLogRef = mRootRef.child(Const.Firebase.GUEST_LOG).child(nodeId);
+        Firebase guestEntryRef = getGuestEntryNode(nodeId);
 
-        guestLogRef.setValue(guestEntry, new Firebase.CompletionListener() {
+        guestEntryRef.setValue(guestEntry, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 if (firebaseError != null) {
@@ -73,6 +70,25 @@ public class FirebaseEndPoint {
         });
     }
 
+    public void remove(String guestEntryId, final SetValueListener firebaseSetValueListener) {
+
+        Firebase guestEntryRef  = getGuestEntryNode(guestEntryId);
+
+        guestEntryRef.removeValue(new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                if (firebaseError != null) {
+                    Logr.e("Failed to removeValue via Firebase");
+                    firebaseSetValueListener.onFirebaseError(firebaseError);
+                }
+                else {
+                    Logr.d("Data removed successfully.");
+                    firebaseSetValueListener.onFirebaseSuccess();
+                }
+            }
+        });
+    }
+
     public void guestLogGetAll(final DataSnapshotListener dataSnapshotListener) {
 
         Firebase guestLogRef = new com.firebase.client.Firebase(Const.Firebase.GUEST_LOG_URL);
@@ -92,55 +108,4 @@ public class FirebaseEndPoint {
         });
     }
 
-
-
-    public void removeNodesWithoutIdField(DataSnapshot guestLogSnapshot) {
-
-        Iterable<DataSnapshot> dataSnapshots = guestLogSnapshot.getChildren();
-        for (DataSnapshot guestEntryDataSnapshot : dataSnapshots) {
-
-            Iterable<DataSnapshot> dataSnapshotFields = guestEntryDataSnapshot.getChildren();
-
-            boolean idFieldFound = false;
-
-            for (DataSnapshot dataSnapshotField : dataSnapshotFields) {
-
-                String childKey = dataSnapshotField.getKey();
-                if (childKey.equals(Const.Field.ID)) {
-                    idFieldFound = true;
-                    break;
-                }
-            }
-
-            if ( ! idFieldFound ) {
-                guestEntryDataSnapshot.getRef().removeValue();
-            }
-        }
-    }
-
 }
-
-
-/*
-long childrenCount = guestLogSnapshot.getChildrenCount();
-
-            Iterable<DataSnapshot> dataSnapshotFields = guestEntryDataSnapshot.getChildren();
-
-            boolean idFieldFound = false;
-
-            for (DataSnapshot dataSnapshotField : dataSnapshotFields) {
-
-                String childKey = dataSnapshotField.getKey();
-
-                if (childKey.equals(Const.Field.ID)) {
-                    idFieldFound = true;
-                    break;
-                }
-
-                Object valObj = dataSnapshotField.getValue();
-                if (valObj != null) {
-                    String val = valObj.toString();
-                    Logr.d("val = " + val);
-                }
-            }
- */

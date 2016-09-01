@@ -1,14 +1,12 @@
 package com.demo.guestbook.activity;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,17 +22,18 @@ import com.demo.guestbook.model.sharedprefs.AppStateDao;
 import com.demo.guestbook.model.validator.GuestEntryValidator;
 import com.demo.guestbook.model.view.GuestEntryViewModel;
 import com.demo.guestbook.remote.FirebaseEndPoint;
+import com.demo.guestbook.ui.dialog.DeleteGuestEntryDialog;
 import com.demo.guestbook.ui.util.DatePickerHelper;
 import com.demo.guestbook.ui.util.DialogUtil;
+import com.demo.guestbook.ui.util.InputUtil;
 import com.demo.guestbook.util.Const;
 import com.demo.guestbook.util.TheApp;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 /**
- * Launcher Activity displaying two EditTexts. Both EditTexts point to same class object. Since we
- * have used 2 way authentication, once we update the text in either of EditText, it will automatically
- * be reflected in another EditText.
+ * Since there are listeners from the TabsActivity for server updates,
+ * making a server update here will cause the UI to go back to the Tabs view
  */
 
 public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
@@ -72,20 +71,30 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         String submitText = TheApp.findString(R.string.submit);
         int deleteButtonVisibility = View.GONE;
 
+        mActivityAddGuestLogBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_guest_log);
+
         if (isInEditMode() ) {
 
             submitText = TheApp.findString(R.string.update);
             deleteButtonVisibility = View.VISIBLE;
 
             GuestEntryMapper mapper = new GuestEntryMapper();
-            GuestEntry guestEntry = AppStateDao.getAppState().getLocalGuestEntryById(mEditNodeId);
+            final GuestEntry guestEntry = AppStateDao.getAppState().getLocalGuestEntryById(mEditNodeId);
             mGuestEntryViewModel = mapper.map(guestEntry);
+
+            InputUtil.hideKeyboard(mActivityAddGuestLogBinding.submitBtn);
+
+            mActivityAddGuestLogBinding.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DeleteGuestEntryDialog(AddGuestLogActivity.this, guestEntry).show();
+                }
+            });
         }
         else {
             mGuestEntryViewModel = new GuestEntryViewModel();
         }
 
-        mActivityAddGuestLogBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_guest_log);
         mActivityAddGuestLogBinding.submitBtn.setText(submitText);
         mActivityAddGuestLogBinding.deleteBtn.setVisibility(deleteButtonVisibility);
 
@@ -110,7 +119,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideKeyboard(v);
+                InputUtil.hideKeyboard(v);
                 updateFirebase();
             }
         });
@@ -119,7 +128,7 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard(v);
+                    InputUtil.hideKeyboard(v);
                     updateFirebase();
                     return true;
                 }
@@ -127,11 +136,6 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
                 return false;
             }
         });
-    }
-
-    private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void updateFirebase() {
@@ -142,11 +146,11 @@ public class AddGuestLogActivity extends BaseUpNavigationAppCompatActivity
         GuestEntryValidator guestEntryValidator = new GuestEntryValidator(mGuestEntry);
         boolean isValid = guestEntryValidator.isValid();
         if ( ! isValid ) {
-            String title = "Valid input error";
+            String title = "Validation input error";
             String errorMessage = guestEntryValidator.getErrorMessageString();
             new DialogUtil().getErrorAlertDialog(AddGuestLogActivity.this, title, errorMessage).show();
 
-            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
             return;
         }
 

@@ -1,4 +1,4 @@
-package com.demo.guestbook.ui.util;
+package com.demo.guestbook.ui.dialog;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -27,7 +27,7 @@ public class CleanUpFirebaseDialog {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder
-                .setTitle("Irreversible Action!")
+                .setTitle("Clean Up Firebase ~ Irreversible Action!")
                 .setMessage("Are you sure you want to clear invalid data? It can't be undone.")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

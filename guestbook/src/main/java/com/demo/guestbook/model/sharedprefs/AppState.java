@@ -34,6 +34,32 @@ public class AppState {
         return searchGuestEntry;
     }
 
+    public boolean removeLocalGuestEntryById(String removeGuestEntryId) {
+
+        verifyLocalGuestEntries();
+
+        int removeIndex = -1;
+        for (int i = 0; i< mLocalGuestEntries.size(); i++) {
+
+            GuestEntry localGuest = mLocalGuestEntries.get(i);
+
+            if (removeGuestEntryId.equals(localGuest.getId())) {
+                removeIndex = i;
+                break;
+            }
+        }
+
+        if (removeIndex == -1) {
+            Logr.d("APP STATE ERROR - Fix me!  Failed to find GuestEntry "
+                    +"expected to exist for id = "
+                    + removeGuestEntryId);
+            return false;
+        }
+
+        mLocalGuestEntries.remove(removeIndex);
+        return true;
+    }
+
     public void addLocalGuestEntry(GuestEntry guestEntry) {
         verifyLocalGuestEntries();
         mLocalGuestEntries.add(guestEntry);
@@ -58,7 +84,6 @@ public class AppState {
                     + guestEntry.getId());
             return;
         }
-
 
         mLocalGuestEntries.remove(updateIndex);
         mLocalGuestEntries.add(updateIndex, guestEntry);

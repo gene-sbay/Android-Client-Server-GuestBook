@@ -22,7 +22,7 @@ import com.demo.guestbook.R;
 import com.demo.guestbook.model.pojo.GuestEntry;
 import com.demo.guestbook.model.sharedprefs.AppStateDao;
 import com.demo.guestbook.ui.list.GuestEntryRecyclerView;
-import com.demo.guestbook.ui.util.CleanUpFirebaseDialog;
+import com.demo.guestbook.ui.dialog.CleanUpFirebaseDialog;
 import com.demo.guestbook.util.Const;
 
 import java.util.List;
